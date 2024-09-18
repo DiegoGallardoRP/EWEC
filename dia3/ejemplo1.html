@@ -6,19 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script>
+        var listaNombres = ["Juan", "Jose", "Javier", "Jaime", "Jazmin"]
         var cont = 0;
-        var tn=0;
         function guardarDatos() {
             let nombre = document.getElementById("nombre").value;
             let puntos = document.getElementById("puntos").value;
             cont++;
-            let texto = `<tr>
+            for (let i = 0; i < listaNombres.length; i++) {
+                if (listaNombres[i] == nombre) {
+                    let texto = `<tr>
                             <td>${nombre}</td>
                             <td>${puntos}</td>
                         </tr>`;
-            
-            document.getElementById("tbody1").innerHTML += texto;
-            document.getElementById("total").value = parseInt(document.getElementById("total").value) + parseInt(puntos);
+
+                    document.getElementById("tbody1").innerHTML += texto;
+                    document.getElementById("total").value = parseInt(document.getElementById("total").value) + parseInt(puntos);
+                }
+            }            
         }
     </script>
 </head>
