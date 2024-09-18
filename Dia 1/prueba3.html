@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>prureba3</title>
+    <script type="text/javascript" src="prueba3.js">
+        var listaLibros = ["Dune", "Don Quijote", "Invisible", "It"];
+        var texto = '';
+        function pintarLibros() {
+            texto = "<table bgcolor='blue' border=1 width=200>";
+            for (let i = 0; i < listaLibros.length; i++) {
+                texto += `<h1>${listaLibros[i]}<h1/>`
+            }
+            document.body.innerHTML = texto;
+        };
+    </script>
+</head>
+
+<body>
+    <script>
+        pintarLibros();
+    </script>
+</body>
+
+</html>

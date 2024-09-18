@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba2</title>
+</head>
+
+<body>
+    <script>
+        var foto = prompt("Dame el nombre de una imagen");
+        var num = prompt("¿Cuántas veces quieres mostrarla?");
+        while (num < 1 || num > 10) {
+            var num = prompt("¿Cuántas veces quieres mostrarla?");
+        }
+        var texto = '';
+        for (var cont = 0; cont < num; cont++) {
+            texto += `<img src='${foto}'/>`;
+        }
+        document.body.innerHTML = texto;
+
+    </script>
+</body>
+
+</html>
