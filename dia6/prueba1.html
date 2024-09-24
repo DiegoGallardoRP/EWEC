@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table,tr,td{
+            border: 2px solid blue;
+        }
+    </style>
+    <script>
+        var listaCoches=[];
+        function mostrarLista(){
+            if(document.getElementById("tablaCoches")){
+                document.getElementById("tablaCoches").remove();
+            }
+            let contenidoHTML="<table id='tablaCoches'><tbody>";
+                for(let i=0;i<listaCoches.length;i++){
+                    contenidoHTML+=`<tr>
+                                        <td>${listaCoches[i]}</td>
+                                    </tr>`;
+                }
+                contenidoHTML+="</tbody></table>";
+                document.body.innerHTML+=contenidoHTML;
+        };
+        function guardarAlFinal(){
+            let nuevoCoche=document.getElementById("matricula").value;
+            listaCoches.push(nuevoCoche);
+        }
+        function guardarAlPrincipio(){
+            let nuevoCoche=document.getElementById("matricula").value;
+            listaCoches.unshift(nuevoCoche);
+        }
+        function eliminarPoiscion(){
+            let posicion=document.getElementById("posicion").value;
+            if(posicion>=listaCoches.length){
+                alert("Esa posicion no existe");
+            }else{
+            posicion=posicion-1;
+            listaCoches.splice(posicion, 1);
+            mostrarLista();
+            alert("Posicion eliminada");
+            }            
+        }
+        function ordenarAscendente(){
+            listaCoches.sort((a,b)=>{
+                if (a<b) return 1
+                else return -1
+            });
+            mostrarLista();
+        }
+        function ordenarDescendente(){
+            listaCoches.sort((a,b)=>{
+                if (a<b) return -1
+                else return 1
+            });
+            mostrarLista();
+        }
+    </script>
+</head>
+<body>
+    <p>
+        Matricula coche: <input type="text" id="matricula">
+    </p>
+    <p>Posicion: 
+        <select id="posicion">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+            <option>6</option>
+            <option>7</option>
+            <option>8</option>
+            <option>9</option>
+            <option>10</option>
+        </select>
+    </p>
+    <p>
+        <button type="button" onclick="mostrarLista()">Mostrar lista</button>
+        <button type="button" onclick="guardarAlFinal()">Guardar al final</button>
+        <button type="button" onclick="guardarAlPrincipio()">Guardar al principio</button>
+        <button type="button" onclick="eliminarPoiscion()">Eliminar Posicion</button>
+    </p>
+    <p>
+        <button type="button" onclick="ordenarAscendente()">Ordenar Ascendente</button>
+        <button type="button" onclick="ordenarDescendente()">Ordenar Descendente</button>
+    </p>
+</body>
+</html>
