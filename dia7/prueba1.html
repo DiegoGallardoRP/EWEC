@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table,
+        tr,
+        td {
+            border: 2px solid blue;
+        }
+    </style>
+    <script>
+        var listaLibros = [["IT", "Stephen King", 1978],
+        ["1984", "George Orwell", 1949],
+        ["Revolución en la granja", "George Orwell", 1953]];
+        //método 2
+        var listaLibros2 = [];
+        listaLibros2[0] = ["IT", "Stephen King", 1978];
+        listaLibros2[1] = ["1984", "George Orwell", 1949];
+        listaLibros2[2] = ["Revolución en la granja", "George Orwell", 1953];
+        //método 3
+        var listaLibros3 = new Array();
+        listaLibros3.push(["IT", "Stephen King", 1978]);
+        listaLibros3.push(["1984", "George Orwell", 1949]);
+        listaLibros3.push(["Revolución en la granja", "George Orwell", 1953]);
+
+        window.onload = () => {
+            mostrarLibros(listaLibros);
+        }
+        function ordenarPorTitulos(){
+            listaLibros.sort((a,b)=>{
+                    if(a[0]>b[0]) return 1
+                    else return -1
+                })            
+            mostrarLibros(listaLibros);
+        }
+        function ordenarPorAutor(){
+            listaLibros.sort((a,b)=>{
+                    if(a[1]>b[1]) return 1
+                    else return -1
+                })            
+            mostrarLibros(listaLibros);
+        }
+        function mostrarLibros(lista) {
+            if(document.getElementById("tablaLibros")){
+                document.getElementById("tablaLibros").remove();
+            }
+            let codigoHTMLTabla = `<table id="tablaLibros">
+                <thead>
+                    <tr><th><a href="javascript: ordenarPorTitulos()">Titulo</a></th>
+                        <th><a href="javascript: ordenarPorAutor()">Nombre autor</a></th>
+                        <th><a href="javascript: ordenarPorAño()">Año</a></th></tr>
+                </thead>
+                <tbody>`;
+
+            lista.forEach((libro, indice, array) => {
+                codigoHTMLTabla += `<tr>`;
+                libro.forEach((campo, indice2, array2) => {
+                    codigoHTMLTabla += `<td>${campo}</td>`;
+                })
+                codigoHTMLTabla += `</tr>`;
+            });
+
+            codigoHTMLTabla += `</tbody>
+                </table>`;
+            document.body.insertAdjacentHTML("beforeend",codigoHTMLTabla);
+            }
+        
+        function filtrarPorTitulo(){
+            let tituloABuscar=document.getElementById("tituloBuscar").value;
+            var listaLibrosFiltrada=listaLibros.filter((libro)=>
+            libro[0].toLocaleLowerCase().includes(tituloABuscar.toLocaleLowerCase()));
+            mostrarLibros(listaLibrosFiltrada);
+        }
+    </script>
+</head>
+
+<body>
+    <p>Filtrar: <input type="text" id="tituloBuscar" onkeyup="filtrarPorTitulo()"> <button type="button" onclick="filtrarPorTitulo()">Filtrar por titulo</button></p>
+</body>
+
+</html>
