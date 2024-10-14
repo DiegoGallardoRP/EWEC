@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div{
+            border: 2px solid blue;
+        }
+    </style>
+    <script src="claseAlumno.js"></script>
+    <script src="jquery.js"></script> 
+    <script>
+        var listaAlumnos=[]; //Variable global
+        onload = function(){
+            /*var alumno1= new Alumno("Fer","Garcia",1,["DWEC","DWES"]);
+            alumno1.mostrarDetalles();*/
+            cargarDatosAlumno();
+        }
+        function cargarDatosAlumno(){
+            $.getJSON("datosAlumno.json",(lista)=>{
+                listaAlumnos=lista;
+                listaAlumnos.map(alumno=>alumno.mostrarDetalles= function(){
+                    let codigoHTMLDiv=`<div>`;
+                        for(campo in alumno){
+                            codigoHTMLDiv+=`<p>${campo}:${alumno[campo]}</p>`;
+                        }
+                        codigoHTMLDiv+=`</div>`;
+                    document.body.insertAdjacentHTML("beforeend",codigoHTMLDiv);
+                })
+                console.log(listaAlumnos);
+                if(listaAlumnos.length>0){
+                    pintarAlumnos(listaAlumnos);
+                }
+            })
+        }
+        /*async function cargarDatosAlumno(){
+            let datosAlumnoTexto=await fetch("datosAlumno.json");
+            listaAlumnos= await datosAlumnoTexto.json();
+            console.log(listaAlumnos);
+            if(listaAlumnos.length>0){
+                pintarAlumnos();
+            }
+
+        }*/
+        function anadirAlumno(){
+            var alumno=new Alumno("Jose","Fernandez",5,["DWEC"]);
+            listaAlumnos.push(alumno);
+            pintarAlumnos(listaAlumnos);
+        }
+        function pintarAlumnos(lista){
+            lista.forEach(alumno => {
+                alumno.mostrarDetalles();
+            });
+        }
+    </script>
+</head>
+<body>
+    <button type="button" onclick="anadirAlumno()">AÑADIR</button>
+</body>
+</html>

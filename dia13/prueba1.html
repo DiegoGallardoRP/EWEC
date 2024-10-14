@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        /*class Dulce{
+            constructor(){
+                this.calorias=10;
+                this.foto="foto1.jpeg"
+            }
+            mostrarImagen(){
+                document.getElementById("imagenDulce").src=this.foto;
+            }
+        }*/
+        function Dulce(calorias,foto){
+            this.calorias=calorias;
+            this.foto=foto
+            this.mostrarImagen=function(){
+                document.getElementById("imagenDulce").src=this.foto;
+            }
+        }
+        onload = ()=>{
+            //var dulce1=new Dulce();
+            /*var dulce1={
+                "calorias":10,
+                "foto":"foto1.jpeg",
+                "mostrarImagen": function (){
+                    document.getElementById("imagenDulce").src=this.foto;
+                }
+            }*/
+            var dulce1=new Dulce(10,"foto1.jpeg");
+            dulce1.sabor="Fresa";
+            dulce1.mostrarImagen();
+        }
+        
+    </script>
+</head>
+<body>
+    <img src="" id="imagenDulce"/>
+</body>
+</html>
