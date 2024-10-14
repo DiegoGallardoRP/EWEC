@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>        
+        function esPalindromo(texto){
+            texto=texto.split(" ").join("").toLowerCase();
+            let textoAlReves=texto.split("").reverse().join("");            
+
+            if(texto==textoAlReves){
+                return true;
+            }else{
+                return false;
+            }
+        }
+        console.log(esPalindromo('ala'));
+        console.log(esPalindromo('adios'));
+    </script>
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+</html>

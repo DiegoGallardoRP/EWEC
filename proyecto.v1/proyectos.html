@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es" >
+<head>
+  <meta charset="UTF-8">
+  <title>Gestiona IES</title>
+  <link rel="stylesheet" href="./css/aterrizaje.css">
+  <style>
+        table,tr,th,td{
+            border: 2px solid blue
+        }
+        #nuevo{
+            position: absolute;
+            top: 200px;
+            left: 200px;
+            z-index: 2;
+            background-color: white;
+            color: black;
+            border: 2px solid olive;
+        }
+        .visible{
+            display:block;
+        }
+        .oculto{
+            display: none;
+        }
+    </style>
+    <script src="./clases/Proyecto.js"></script>
+    <script>
+        onload = ()=>{
+            cargarProyectos();
+            pintarProyectos(listaProyectos);
+        }
+        function crearNuevo(){
+            document.getElementById("nuevo").className="visible";
+        }
+        function volver(){
+            location.href="aterrizaje.html"
+        }
+        function imprimir(){
+            window.print();
+        }
+        function ordenar(campo){
+            listaProyectos.sort((a,b)=>{
+                if (a[campo]>b[campo])return 1;
+                else return -1;
+            });
+            pintarProyectos(listaProyectos);
+        }
+        var listaProyectos=[];
+        function cargarProyectos(){
+            listaProyectos.push(new Proyecto(1,"Proyecto1","","1",new Date(),new Date(),"SW",1000,"Ana Marquez"));
+            listaProyectos.push(new Proyecto(2,"Proyecto2","","2",new Date(),new Date(),"REDES",2000,"Julia Romero"));
+            listaProyectos.push(new Proyecto(3,"Proyecto3","","3",new Date(),new Date(),"IA",3000,"Esteban Limon"));
+        }
+        function pintarProyectos(lista){
+            let tbody=document.getElementsByTagName("tbody")[0];
+            tbody.innerHTML="";
+            let texto="";
+            lista.forEach(elemento => {
+                texto+=`<tr>
+                    <td>${elemento.codigo}</td>
+                    <td>${elemento.nombre}</td>
+                    <td>${elemento.presupuestoInicial}</td>
+                </tr>`
+            });
+            tbody.insertAdjacentHTML("beforeend",texto);
+        }
+    </script>
+</head>
+<body translate="no" >
+  <div id="container">
+    <nav>
+        <ul>
+            <li><a href="#">General</a></li>
+            <li><a href="#">Empleados <i class="down"></i></a>
+            <!-- Primer Menu Desplegable -->
+            <ul>
+                <li><a href="#">Alta</a></li>
+                <li><a href="#">Modificación</a></li>
+            </ul>        
+            </li>
+	        <li><a href="#">Clientes <i class="down"></i></a>
+            <ul>
+                <li><a href="#">Alta</a></li>
+                <li><a href="#">Modificación</a></li>
+                <li><a href="#">Facturación</a></li>
+            </ul> 
+            <li><a href="#">Proyectos <i class="down"></i></a>
+             <!-- Primer Menu Desplegable -->
+            <ul>
+                <li><a href="#">Alta</a></li>
+                <li><a href="#">Lista</a></li>
+                <li><a href="#">Consulta</a>
+            	 <!-- Segudo Menu Desplegable -->
+                <ul>
+                    <li><a href="#">Ver</a></li>
+                    <li><a href="#">Modificar</a></li>
+                    <li><a href="#">Otros</a>
+                         <!-- Tercer Menu Desplegable -->
+                        <ul>
+                            <li><a href="#">opcion1</a></li>
+                            <li><a href="#">opcion2</a></li>
+                            <li><a href="#">opcion3</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                </li>
+            </ul>
+            </li>
+            <li><a href="#">Ayuda</i></a></li>
+           
+        </ul>
+    </nav>
+    <div id="central">
+        <table >
+            <thead>
+                <tr>
+                    <th>Codigo</th>
+                    <th>Descripcion</th>
+                    <th>Presupuesto Inicial</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+
+    </div>
+    <br/>
+    <div id="acciones">
+        <button type="button" id="btnCancelar" onclick="volver()">Cancelar</button>
+        <button type="button" id="btnNuevo" onclick="crearNuevo()">Nuevo</button>
+        <button type="button" id="btnOrdenar" onclick="ordenar('nombre')">Ordenar por nombre</button>
+        <button type="button" id="btnImprimir" onclick="imprimir()">Imprimir</button>
+    </div>
+    <div id="nuevo" class="oculto">
+        <p>X</p>
+        <p>Codigo<input type="text" id="codigo"></p>
+        <p>Descripcion<input type="text" id="descripcion"></p>
+        <p>Presupuesto<input type="text" id="presupuesto"></p>
+        <p><button type="button" id="guardar" onclick="guardar()">Guardar</button></p>
+    </div>
+  <footer><a target="blank" href="https://www.educa2.madrid.org/web/iescanaveral">IES EL CAÑAVERAL</a></footer>
+</div>
+  
+  
+  
+  
+  
+
+</body>

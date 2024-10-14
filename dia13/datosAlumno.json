@@ -1,0 +1,20 @@
+[
+    {
+        "nombre":"Fernando",
+        "apellidos":"Garcia Jimenez",
+        "matricula":1,
+        "listaModulos":["DWES","DWEC"]
+    },
+    {
+        "nombre":"Jaime",
+        "apellidos":"Maeso",
+        "matricula":2,
+        "listaModulos":["DWES","DWEC"]
+    },
+    {
+        "nombre":"Carmen",
+        "apellidos":"Jimenez",
+        "matricula":3,
+        "listaModulos":["DWES","DWEC","EN"]
+    }
+]

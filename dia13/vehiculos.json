@@ -1,0 +1,13 @@
+[
+    {
+        "marca":"Seat",
+        "modelo":"1900",
+        "color":"Rojo",
+        "matricula":"1234ABC",
+        "kilometros":"90",
+        "cilindrada":"120",
+        "antiguedad":"70",
+        "foto":"foto.png",
+        "numeroDeAsientos":"4"
+    }
+]
