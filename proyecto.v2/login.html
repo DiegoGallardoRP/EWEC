@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+    <link rel="stylesheet" href="./css/login.css">
+      <style>
+        .oculto{
+            display: none;
+        }
+        .visible{
+            display:block;
+            color: red;
+        }
+    </style>
+    <script src="./clases/Usuario.js"></script>
+    <script>
+        var listaUsuarios=[];
+        cargarUsuarios();
+        function cargarUsuarios(){
+          listaUsuarios.push(new Usuario("Juan","1234","Juan","Gomez","juan@kk.com","1"));
+          listaUsuarios.push(new Usuario("Jaime","1234","Jaime","Perez","jaime@kk.com","2"));
+          listaUsuarios.push(new Usuario("Jacinto","1234","Jacinto","Lopez","jacinto@kk.com","2"));
+          listaUsuarios.push(new Usuario("Jorge","1234","Jorge","Garcia","jorge@kk.com","2"));
+          listaUsuarios.push(new Usuario("Jose","1234","Jose","Gomez","jose@kk.com","2"));
+        }
+        function validar(){
+            //recuperar el codigo del usuario
+            let codigo=document.getElementById("codigo").value;
+            //recuperar la clave
+            let clave=document.getElementById("clave").value;
+            if (listaUsuarios.findIndex((usuario)=>usuario.codigo==codigo && 
+                                                   usuario.clave==clave)!=-1){
+                //cargar la página aterrizaje.html
+                location.href="aterrizaje.html"
+            } else {
+                //mostrar un mensaje de error
+                document.getElementById("errorCodigoClave").className="visible"
+            }
+        }
+        function ocultar(){
+             document.getElementById("errorCodigoClave").className="oculto"
+        }
+    </script>
+</head>
+<body translate="no" >
+  <div class="wrapper">
+  <form class="login">
+    <p class="title">Acceso</p>
+    <input type="text" placeholder="codigo" id="codigo" autofocus onfocus="ocultar()"/>
+    <i class="fa fa-user"></i>
+    <input type="password" placeholder="clave" id="clave" />
+    <i class="fa fa-key"></i>
+    <p id="errorCodigoClave" class="oculto">El usuario y/o la clave son erroneos</p>
+    <i class="fa fa-key"></i>
+    <a href="#">¿Olvidaste la clave?</a>
+    <button id="acceder" type="button" onclick="validar()">
+      <i class="spinner"></i>
+      <span class="state">Acceder</span>
+    </button>
+  </form>
+  <footer><a target="blank" href="https://www.educa2.madrid.org/web/iescanaveral">IES EL CAÑAVERAL</a></footer>
+  </div>
+</body>
+</html>

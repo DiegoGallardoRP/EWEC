@@ -1,0 +1,11 @@
+{
+  "name": "pruebas",
+  "version": "1.0.0",
+  "main": "ejemploCodigo.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "fer",
+  "license": "ISC",
+  "description": ""
+}

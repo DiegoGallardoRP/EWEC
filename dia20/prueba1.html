@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table,tr,td{
+            border: blue solid;
+        }
+        img{
+            width: 20px;
+            height: 20px;
+        }
+    </style>
+    <script>
+        onload = () => {
+            crearContenido();
+        }
+        function crearContenido() {
+            let contenidoHTML = ``;
+            for (let a = 0; a < 30; a++) {
+                contenidoHTML += `<div>`;
+                for (let i = 1; i < 4; i++) contenidoHTML += `<p>Parrafo ${i}</p>`;
+                for (let i = 1; i < 3; i++) contenidoHTML += `<img src="foto${i}.jpg">`;
+                contenidoHTML += `<table><tbody>`;
+                for (let i = 1; i < 4; i++) {
+                    contenidoHTML += `<tr>`;
+                    for (let j = 1; j < 6; j++) {
+                        contenidoHTML += `<td>Fila ${i} Celda ${j}</td>`;
+                    }
+                    contenidoHTML += `</tr>`;
+                }
+                contenidoHTML += `</table></tbody>`;
+                contenidoHTML += `</div>`;
+
+                document.body.insertAdjacentHTML("beforeend", contenidoHTML);
+            }
+        }
+        function ejercicio1(){
+            let div3=document.getElementsByTagName("div")[2];
+            div3.style.backgroundColor= "red";
+            div3.className="DivRojo";
+        }
+        function ejercicio2(){
+            let listaImg=[...document.getElementsByTagName("img")];
+            listaImg.forEach(imagen=>imagen.style.border="2px solid green");
+
+            //Método2: [...document.querySelectorAll("img")].forEach(imagen=>imagen.style.border="2px solid green");
+        }
+        function ejercicio3(){
+            document.getElementsByTagName("div")[2].getElementsByTagName("p")[2].innerHTML="CAMBIADO";
+        }
+        function ejercicio4(){
+
+        }
+
+    </script>
+</head>
+
+<body>
+<button type="button" onclick="ejercicio1()">Ejercicio1</button>
+<button type="button" onclick="ejercicio2()">Ejercicio2</button>
+<button type="button" onclick="ejercicio3()">Ejercicio3</button>
+<button type="button" onclick="ejercicio4()">Ejercicio4</button>
+</body>
+
+</html>

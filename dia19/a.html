@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        var listaVentanas=[];
+        onload = () => {
+            var listaBotones=[...document.getElementsByTagName("button")];
+            listaBotones.slice(0,3).forEach((boton,indice)=>
+                boton.addEventListener("click",()=>abrirVentana(indice)));
+            listaBotones[3].addEventListener("click",escribir);
+            listaBotones[4].addEventListener("click",cerrar);
+        }
+        function abrirVentana(posicion){
+            let ventana=window.open();
+            listaVentanas[posicion]=ventana;
+        }
+        function escribir(){
+            var texto=document.getElementById("cajaTexto").value;
+            let numeroVentana=document.getElementById("selectVentana").value;
+            if(listaVentanas.length>=numeroVentana-1 && listaVentanas[numeroVentana-1]){
+                listaVentanas[numeroVentana-1].document.body.innerHTML+=texto;
+            }else{
+                alert('Error');
+            }
+        }
+        function cerrar(){
+            let numeroVentana=document.getElementById("selectVentana").value;
+            listaVentanas[numeroVentana-1].close();
+        }
+    </script>
+
+</head>
+
+<body>
+    <button type="button" id="boton1">Abrir ventana 1</button>
+    <button type="button" id="boton2">Abrir ventana 2</button>
+    <button type="button" id="boton3">Abrir ventana 3</button>
+
+    <select id="selectVentana">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+    </select>
+    Texto a escribir: <input type="text" id="cajaTexto">
+    <button type="button" id="escribir">Escribir texto en ventana</button>
+    <button type="button" id="cerrar">Cerrar ventana</button>
+</body>
+
+</html>
