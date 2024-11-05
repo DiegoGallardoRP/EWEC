@@ -306,6 +306,9 @@
                 location.href = "Serie.html";
             }
         }
+
+
+
         //Carrusel series
         function anteriorPaginaSerie(categoria) {
             if (indicePaginaSeries > 0) {
@@ -313,6 +316,7 @@
                 mostrarSeriesPorCategoria();
             }
         }
+
         function siguientePaginaSerie(categoria, totalSeries) {
             const totalPaginas = Math.ceil(totalSeries / seriesPorPagina);
             if (indicePaginaSeries < totalPaginas - 1) {

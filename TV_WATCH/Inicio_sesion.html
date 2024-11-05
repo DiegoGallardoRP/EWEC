@@ -1,57 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inflix</title>
     <style>
-        .oculto{
-            display:none;
+        .oculto {
+            display: none;
         }
-        .visible{
-            display:block;
-            color:red;
+
+        .visible {
+            display: block;
+            color: red;
         }
     </style>
     <script src="./clases/Usuario.js"></script>
     <script>
-        var listaUsuarios=[];
-        function cargarUsuarios(){
-            listaUsuarios.push(new Usuario("Diego","1234","Diego","Diego@tv.com","S","A"));
-            listaUsuarios.push(new Usuario("Michael","1234","Michael","Michael@tv.com","N","B"));
+        var listaUsuarios = JSON.parse(localStorage.getItem("listaUsuarios"));
+        function cargarUsuarios() {
+            if (!listaUsuarios) {
+                listaUsuarios = [
+                    new Usuario("0001", "1234", "Diego", "Diego@tv.com", "S", "A"),
+                    new Usuario("0002", "1234", "Michael", "Michael@tv.com", "N", "B"),
+                    new Usuario("0003", "1234", "James", "James@tv.com", "N", "A")
+                ];
+
+                localStorage.setItem("listaUsuarios", JSON.stringify(listaUsuarios));
+            }
+            return listaUsuarios;
         }
         cargarUsuarios();
-        
+
         function comprobarDatos() {
-    let codigo = document.getElementById("codigo").value;
-    let clave = document.getElementById("clave").value;
-    let usuarioEncontrado = listaUsuarios.find((usuario) => usuario.codigo == codigo && usuario.clave == clave);
-    
-    if (usuarioEncontrado) {
-        if (usuarioEncontrado.estado == "A") {
-            location.href = "Inicio.html"; 
-        } else {
-            location.href = "Subscripcion.html"; 
+            let nombre = document.getElementById("nombre").value;
+            let clave = document.getElementById("clave").value;
+            let usuarioEncontrado = listaUsuarios.find((usuario) => usuario.nombre == nombre && usuario.clave == clave);
+
+            if (usuarioEncontrado) {
+                sessionStorage.setItem("usuarioActual", JSON.stringify(usuarioEncontrado));
+                if (usuarioEncontrado.estado == "A") {
+                    location.href = "Inicio.html";
+                } else {
+                    location.href = "Subscripcion.html";
+                }
+            } else {
+                document.getElementById("error").className = "visible";
+            }
         }
-    } else {
-        document.getElementById("error").className = "visible";
-    }
-}
-        function ocultar(){
-            document.getElementById("error").className="oculto";
+        function ocultar() {
+            document.getElementById("error").className = "oculto";
         }
     </script>
 </head>
+
 <body>
     <center>
         <h1>INICIA SESIÓN</h1>
         <p>
             Por favor introduzca el usuario y la contraseña:
         </p>
-        <input type="text" id="codigo" placeholder="Introduzca su nombre"> </br>
+        <input type="text" id="nombre" placeholder="Introduzca su nombre"> </br>
         <input type="password" id="clave" placeholder="Contraseña"> </br>
         <p id="error" class="oculto">El usuario y/o la clave son erroneos</p>
-        <button type="button" onclick="comprobarDatos()">Enviar</button>
+        <p><a href="Nueva_cuenta.html">Registrate</a><button type="button" onclick="comprobarDatos()">Enviar</button>
+        </p>
+
     </center>
 </body>
+
 </html>

@@ -4,9 +4,9 @@ class Usuario{
         this.clave=clave;
         this.nombre=nombre;
         this.correo=correo;
-        this.admin=admin;
+        this.admin=admin||"N";
         //S/N ---> SI/NO
-        this.estado=estado;
+        this.estado=estado||"B";
         //A/B ---> ALTA/BAJA
     }
 }
