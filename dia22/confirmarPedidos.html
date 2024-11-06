@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>DOM</title>
+</head>
+<body>
+Ha elegido adquirir: <br />
+<script>
+var productos = document.location.search.slice(1).split('&');
+var i;
+for(i=0;i<productos.length;i++){
+   document.write(productos[i] + '<br/>');
+}
+</script>
+</body>
+</html>

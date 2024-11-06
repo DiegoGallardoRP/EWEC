@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .oculto{
+            display:none;
+        }
+        .visible{
+            display:block;
+            color:red;
+        }
+    </style>
+    <script>
+        function validarFormulario(event){
+            let usuario=document.getElementById("usuario");
+            let clave=document.getElementById("clave");
+            let hayError=false;
+
+            //Comprobar el usuario
+            if(usuario.value.trim()==""){
+                hayError=true;
+                usuario.style.border="2px red solid"
+                document.getElementById("errorUsuario").className="visible";
+            } else{
+                usuario.style.border="2px red grey"
+                document.getElementById("errorUsuario").className="oculto";
+            }
+
+            //Comprobar la clave
+            if(!/(?=^.{9,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/.test(clave.value)){
+                hayError=true;
+                clave.style.border="2px red solid";
+                document.getElementById("errorClave").className="visible";
+            }else{
+                clave.style.border="2px red grey"
+                document.getElementById("errorClave").className="oculto";
+            }
+
+            if(hayError){
+                event.preventDefault();
+            }
+        }
+        onload=()=>{
+            document.getElementById("botonAceptar").addEventListener("click",validarFormulario);
+        }
+    </script>
+</head>
+<body>
+    <form action="server.php" method="get">
+        <p>Usuario <input type="text" id="usuario" name="usuario"><div class="oculto" id="errorUsuario">Usuario no válido</div></p>
+        <p>Clave <input type="password" id="clave" name="clave"><div class="oculto" id="errorClave">Clave no válida</div></p>
+        <p><button type="submit" id="botonAceptar">ACEPTAR</button></p>
+        <p><button type="reset">CANCELAR</button></p>
+    </form>
+</body>
+</html>

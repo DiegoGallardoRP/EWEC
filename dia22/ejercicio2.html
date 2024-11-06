@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+    var intervalo;        
+    var contador;
+    onload=function(){
+        document.getElementById("iniciar").addEventListener("click",()=>{
+            contador=parseInt(document.getElementById("contador").value);
+            intervalo=setInterval(mostrar,1000)
+        });
+    }
+        
+        function mostrar(){
+            document.getElementById("capa1").innerHTML=contador;
+            contador--;
+            if(contador<0){
+                clearInterval(intervalo);
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Cuenta atrás</h1>
+    <p>Contador: <input type="text" id="contador"><button type="button" id="iniciar">Cuenta atrás</button></p>
+    <div id="capa1">
+
+    </div>
+</body>
+</html>

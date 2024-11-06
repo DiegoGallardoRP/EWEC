@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>DOM</title>
+<style>
+th,td, table {
+border: 1px solid black;
+}
+th {width: 200px;}
+</style>
+<script>
+function confirmarPedido(){
+  var cadenaBusqueda ='?';
+  var filas = document.getElementsByTagName('tr');
+  var i;
+  var producto;
+  var cantidad;
+  var productos = new Array();
+  for(i=1;i<filas.length;i++){
+    producto = filas[i].id.split('fila')[1];
+    cantidad = filas[i].firstChild.nextSibling.innerHTML;
+    productos.push(producto + '=' + cantidad)
+  }
+  cadenaBusqueda += productos.join('&');
+  var ruta = document.location.href.split('/');
+  ruta.pop();
+  ruta = ruta.join('/');
+  document.location.assign(ruta + '/confirmarPedido.html' + cadenaBusqueda);
+}
+function quitar(){
+  var fila = document.getElementById('fila' + event.target.id.split('quitar')[1]);
+  fila.parentNode.removeChild(fila);
+}
+function comprar(){
+  var producto = event.target.id.split('comprar')[1];
+  var fila = document.getElementById('fila'+producto);
+  if (fila == undefined){
+    //Si no existe la fila la creo
+    fila = document.createElement('tr');
+    fila.id='fila'+producto;
+    var contenidoTexto;
+    var celda;
+    var boton;
+    contenidoTexto = document.createTextNode(producto);
+    celda = document.createElement('td');
+    celda.appendChild(contenidoTexto);
+    fila.appendChild(celda);
+    contenidoTexto = document.createTextNode('1');
+    celda = document.createElement('td');
+    celda.appendChild(contenidoTexto);
+    fila.appendChild(celda);
+    contenidoTexto = document.createTextNode('QUITAR');
+    var boton = document.createElement('button');
+    boton.addEventListener('click',quitar,false);
+    boton.id='quitar'+producto;
+    boton.appendChild(contenidoTexto);
+    celda = document.createElement('td');
+    celda.appendChild(boton);
+    fila.appendChild(celda);
+    document.getElementsByTagName('tbody')[0].appendChild(fila);
+  }else{
+    //Si sí existe, aumento la cantidad
+    var celdaCantidad = fila.getElementsByTagName('td')[1];
+    celdaCantidad.innerHTML = parseInt(celdaCantidad.innerHTML) + 1;
+  }
+}
+function asignarEventos() {
+  if (document.readyState == 'complete') {
+    window.onunload = function(){};
+    var botonesCompra = document.querySelectorAll('button.botonComprar');
+    var i;
+    for(i=0;i<botonesCompra.length;i++){
+        botonesCompra[i].addEventListener('click',comprar,false);
+    }
+  }
+}
+document.addEventListener('readystatechange', asignarEventos, false);
+</script>
+</head>
+<body>
+<button id='comprarNeumatico' class='botonComprar'>Neum&aacute;tico</button>
+<button id='comprarLimpiaparabrisas' class='botonComprar'>Limpiaparabrisas</button>
+<button id='comprarPastillas_de_freno' class='botonComprar'>Pastillas de freno</button>
+<table id='listaCompra'>
+<thead>
+<tr>
+<th>Producto</th>
+<th>Cantidad</th>
+<th>Quitar</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<button id='confirmarPedido' onclick='confirmarPedido();'>Confirmar pedido</button>
+</body>
+</html>

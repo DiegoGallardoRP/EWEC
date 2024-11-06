@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>DOM</title>
+<style>
+</style>
+<script>
+var segundaVentana;
+function abrirVentana1(){
+  window.open("http://www.madrid.org",'Mismo documento','left=100,top=100,width=300,height=300,toolbar=no,location=yes')
+}
+function cerrarSegunda() {
+  if (segundaVentana) segundaVentana.close();
+}
+function mostrarCajaSegunda() {
+  alert(segundaVentana.document.getElementById('nombre').value);
+}
+function cambiarCaja(){
+  document.getElementById('nombre').value=segundaVentana.document.getElementById('nombre').value;
+}
+function abrirVentana2(){
+  segundaVentana= window.open("",'ENLACE 2','left=300,top=100,width=300,height=300,toolbar=no,location=no');
+  var h1=segundaVentana.document.createElement("H1")
+  h1.innerHTML="HOLA";
+  segundaVentana.document.body.appendChild(h1);
+  var span=segundaVentana.document.createElement("span")
+  span.innerHTML="Nombre";
+  segundaVentana.document.body.appendChild(span);
+  var input=segundaVentana.document.createElement("input")
+  input.id="nombre";
+  input.type="text";
+  segundaVentana.document.body.appendChild(input);
+  var salto=segundaVentana.document.createElement("br")
+  segundaVentana.document.body.appendChild(salto);
+  var boton=segundaVentana.document.createElement("button")
+  boton.innerHTML="Intercambiar caja";
+  boton.type="button";
+  boton.addEventListener("click",cambiarCaja);
+  segundaVentana.document.body.appendChild(boton);
+  var salto=segundaVentana.document.createElement("br")
+  segundaVentana.document.body.appendChild(salto);
+  var boton=segundaVentana.document.createElement("button")
+   boton.innerHTML="Volver";
+  boton.type="button";
+  boton.addEventListener("click",cerrarSegunda);
+  segundaVentana.document.body.appendChild(boton);
+}
+</script>
+</head>
+<body>
+<a href="javascript:abrirVentana1();">Enlace1</a><br>
+<a href="javascript:abrirVentana2();">Enlace2</a><br>
+Nombre:<input type='text' id='nombre'><br>
+<button type="button" onclick="cerrarSegunda()">Cerrar Segunda</button><br>
+<button type="button" onclick="mostrarCajaSegunda()">Mostrar Caja Segunda</button>
+</body>
+</html>

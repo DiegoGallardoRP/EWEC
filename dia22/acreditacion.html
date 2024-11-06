@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>DOM</title>
+<style>
+</style>
+<script>
+window.addEventListener('message',gestionarRecepcion);
+function gestionarRecepcion(evento){
+if (evento.origin == 'http://localhost:8080'){
+var credenciales = evento.data.split('--');
+if(credenciales[0] == 'juanfe' && credenciales[1] == '1234'){
+evento.source.postMessage('acreditacion correcta','http://localhost:8080');
+}
+}
+}
+</script>
+</head>
+<body>
+<h1>Usuario no acreditado</h1>
+</body>
+</html>

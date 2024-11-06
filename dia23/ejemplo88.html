@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        function guardarCookie() {
+            let nombre = document.getElementById("nombre").value;
+            let clave= document.getElementById("clave").value;
+            let cookie = document.cookie.split(";").find(elemento=>elemento.split("=")[0].trim()=="entrada");
+            let listaUsuarios=[];
+            if(cookie){
+                listaUsuarios=JSON.parse(cookie.split("=")[1]);                
+            }
+            listaUsuarios.push({"usuario":nombre,"clave":clave})
+            document.cookie = `entrada=${JSON.stringify(listaUsuarios)}`;
+            document.getElementById("nombre").value = "";
+            document.getElementById("clave").value = "";
+        }
+        onload = () => {
+            document.getElementsByTagName("button")[0].addEventListener("click", guardarCookie);
+        }
+    </script>
+</head>
+
+<body>
+    <button type="button">Pulsame</button>
+    Nombre:<input type="text" id="nombre">
+    Clave:<input type="text" id="clave">
+</body>
+
+</html>

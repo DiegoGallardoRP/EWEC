@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        img{
+            height: 150px;
+            width: 150px;
+        }
+        .datosComic{
+            background-color: red ;
+            border: 1px black solid;
+        }
+    </style>
+    <script>
+        var listaComics=[];
+        class Comic{
+            constructor(autor, nombre,foto,precio,codigo){
+                this.autor=autor;
+                this.nombre=nombre;
+                this.foto=foto;
+                this.precio=precio;
+                this.codigo=codigo;
+            }
+        }
+        function cargarComics(){
+            listaComics.push(new Comic("Stan Lee","Spider-Man","spiderman.jpg","4€","0001"));
+            listaComics.push(new Comic("Stan Lee","Deadpool","deadpool.jpg","2,50€","0002"));
+            listaComics.push(new Comic("Stan Lee","Moon Knight","moonknight.jpg","3€","0003"));
+            listaComics.push(new Comic("Francisco Ibáñez","Mortadelo y Filemon","myf.jpg","10€","0004"));
+            listaComics.push(new Comic("Georges Remi","Tintin","tintin.jpg","10€","0005"));
+        }
+        function cargarSelect(lista){
+            let select=document.getElementById("selectComic");
+            lista.forEach(comic => {
+                select.insertAdjacentHTML("beforeend",`<option value=${comic.codigo}>${comic.nombre}</option>`)
+            });
+        }
+        function mostrarDatosComic(event){
+            let div=document.getElementById("datosComic");
+            let selectComic=document.getElementById("selectComic")
+            div.innerHTML="";
+            let comic=listaComics.find(elemento=>elemento.codigo==selectComic.value);
+            if(comic){
+                let imagen=document.createElement("img");
+                imagen.src=comic.foto;
+                div.appendChild(imagen);
+                let parrafoNombre=document.createElement("p");
+                parrafoNombre.appendChild(document.createTextNode("Nombre: "+comic.nombre));
+                div.appendChild(parrafoNombre);
+                let parrafoAutor=document.createElement("p");
+                parrafoAutor.appendChild(document.createTextNode("Autor: "+comic.autor));
+                div.appendChild(parrafoAutor);
+                let boton=document.createElement("button");
+                boton.appendChild(document.createTextNode("Guardar"));
+                boton.addEventListener("click",()=>guardarEnCarrito(comic));
+                div.appendChild(boton);
+            }
+        }
+        function guardarEnCarrito(comic){
+            let listaProductos=[]
+            if(cookieCarrito){
+                listaProductos=JSON.parse(localStorage.getItem("carrito"));
+            }
+                listaProductos.push(comic);
+                localStorage.setItem(`carrito`,JSON.stringify(listaProductos));
+
+            
+                  
+        }
+        function crearCookie(){
+            if(!localStorage.getItem("carrito")){
+                localStorage.setItem("carrito","[]")
+            }
+        }
+        function mostrarCarrito(){
+            let cookieCarrito=document.cookie.split(";").find(cookie=>cookie.split("=")[0].trim()=="carrito");
+            if(cookieCarrito){
+                let listaProductos=JSON.parse(cookieCarrito.split("=")[1]);
+                alert(`Hay ${listaProductos.length} productos en el carrito`);
+            }
+            
+        }
+        crearCookie();
+        onload=()=>{
+            cargarComics();
+            cargarSelect(listaComics);
+            document.getElementById("selectComic").addEventListener("change",mostrarDatosComic);
+            document.getElementById("carrito").addEventListener("click",mostrarCarrito);
+        }
+    </script>
+</head>
+<body>
+    <img src="carrito.jpg" id="carrito">
+    <select id="selectComic" onchange="mostrarDatosComic()">
+
+    </select>
+    <div id="datosComic">
+
+    </div>
+</body>
+</html>

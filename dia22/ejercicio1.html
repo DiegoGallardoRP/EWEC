@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        img {
+            height: 100px;
+            width: 100px;
+        }
+
+        .oculto {
+            display: none;
+        }
+
+        .visible {
+            display: block;
+        }
+
+        td {
+            border: black solid;
+            height: 100px;
+            width: 100px;
+        }
+    </style>
+    <script>
+        var i = 0
+        function lanzar() {
+            intervalo = setInterval(mostrar, 1000);
+        }
+        function mostrar() {
+            var listaFotos = document.getElementsByTagName("img");
+            if (i > 0) {
+                listaFotos[i - 1].className = "oculto";
+            }
+            if (i == listaFotos.length) {
+                clearInterval(intervalo);
+            } else {
+                listaFotos[i].className = "visible";
+                i++;
+            }
+
+        }
+        onload = () => {
+            lanzar();
+        }
+    </script>
+</head>
+
+<body>
+    <table>
+        <tbody>
+            <tr>
+                <td><img src="foto.jpg" class="oculto"></td>
+                <td><img src="saul.jpg" class="oculto"></td>
+                <td><img src="ryan.jpg" class="oculto"></td>
+                <td><img src="ryan.jpg" class="oculto"></td>
+            </tr>
+            <tr>
+                <td><img src="foto.jpg" class="oculto"></td>
+                <td><img src="saul.jpg" class="oculto"></td>
+                <td><img src="ryan.jpg" class="oculto"></td>
+                <td><img src="ryan.jpg" class="oculto"></td>
+            </tr>
+            <tr>
+                <td><img src="foto.jpg" class="oculto"></td>
+                <td><img src="saul.jpg" class="oculto"></td>
+                <td><img src="ryan.jpg" class="oculto"></td>
+                <td><img src="ryan.jpg" class="oculto"></td>
+            </tr>
+            <tr>
+                <td><img src="foto.jpg" class="oculto"></td>
+                <td><img src="saul.jpg" class="oculto"></td>
+                <td><img src="ryan.jpg" class="oculto"></td>
+                <td><img src="ryan.jpg" class="oculto"></td>
+            </tr>
+            <tr>
+                <td><img src="foto.jpg" class="oculto"></td>
+                <td><img src="saul.jpg" class="oculto"></td>
+                <td><img src="ryan.jpg" class="oculto"></td>
+                <td><img src="ryan.jpg" class="oculto"></td>
+            </tr>
+
+        </tbody>
+    </table>
+</body>
+
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        function validarFormulario() {
+            let nombre = document.getElementById("nombre");
+            let apellidos = document.getElementById("apellidos");
+            let direccion = document.getElementById("direccion");
+            let cPostal = document.getElementById("cPostal");
+            let fNacimiento=document.getElementById("fNacimiento");
+            let Tipo1=document.getElementById("Tipo1");
+            let Tipo2=document.getElementById("Tipo2");
+            let Tipo3=document.getElementById("Tipo3");
+            let hayError=false;
+            //Comprobar nombre
+            if(nombre.value.trim()!=""){
+                hayError=true;
+            }
+
+            //Comprobar apellidos
+            if(apellidos.value.trim()!=""){
+                hayError=true;
+            }
+
+            //Comprobar direccion
+            if(direccion.value.trim()!=""){
+                hayError=true;
+            }
+
+            //Comprobar cPostal
+            if(!/^[0-9]{5}$/.test(cPostal.value)){
+                hayError=true;
+                cPostal.style.border="2px red solid";
+            }
+
+            
+
+            //Comprobar Tipos
+            var listaCheckbox=[...document.querySelectorAll("input[type='checkbox'][name='Tipo']")];
+            var contador=0;
+            listaCheckbox.forEach(checkbox=>{
+                if(checkbox.type=="checkbox" && checkbox.checked) contador++;
+            })
+            if (contador==0){
+
+            }else{
+
+            }
+
+            //Comprobar fecha de nacimiento para que no sea menor
+            if(!esFechaValida(dia,mes,year)||!esMayorEdad(dia,mes,year)){
+
+            }
+
+            if(!hayError){
+                document.forms[0].submit();
+            }
+        }
+        function esFechaValida(dia,mes,year){
+            if(`${dia}`/`${mes}`/`${year}`.match(/^\d{2}\/\d{2}\/\d{4}\/$/)){
+                let fecha=new Date(dia,mes-1,year);
+                // if(fecha.getDate==dia&&fecha.getMonth()==(mes-1)&&fecha.getFullYear()==year) return true;
+                // else return false;
+                return true;
+            }else{
+                return false;
+            }
+        }
+        function esMayorEdad(dia,mes,year){
+            let fecha=new Date(dia,mes-1,year);
+            let fechaHoy=new Date();
+            fecha.setFullYear(fecha.getFullYear()+18);
+            if(fecha<=fechaHoy) return true;
+            else return false;
+        }
+        onload = () => {
+            document.getElementById("botonAceptar").addEventListener("click", validarFormulario);
+        }
+    </script>
+</head>
+
+<body>
+    <form action="server.php" method="post">
+        <p>Nombre: <input type="text" name="nombre" id="nombre"></p>
+        <p>Apellidos: <input type="text" name="apellidos" id="apellidos"></p>
+        <p>Direccion: <input type="text" name="direccion" id="direccion"></p>
+        <p>Codigo postal: <input type="text" name="cPostal" id="cPostal"></p>
+        <p>Fecha de nacimiento: <input type="date" name="fNacimiento" id="fNacimiento"></p>
+        <p>Tipos de libros: 
+            <input type="checkbox" id="Tipo1" name="Tipo" value="Tipo1">Tipo1
+            <input type="checkbox" id="Tipo2" name="Tipo" value="Tipo2">Tipo2
+            <input type="checkbox" id="Tipo3" name="Tipo" value="Tipo3">Tipo3
+        </p>
+        <p><button type="button" id="botonAceptar">ACEPTAR</button>
+            <button type="reset" id="botonCancelar">CANCELAR</button>
+        </p>
+    </form>
+</body>
+
+</html>
