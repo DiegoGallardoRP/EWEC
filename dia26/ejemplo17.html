@@ -38,6 +38,7 @@
         function plegarDesplegar(evento) {
             var disparador = $(evento.target);
             if (disparador.hasClass('pregunta')) {
+                //Intercambia la clase
                 disparador.toggleClass('plegada desplegada').next('li').toggleClass('oculta visible');
             } else {
                 disparador.prev('li').toggleClass('plegada desplegada').end().toggleClass('oculta visible');

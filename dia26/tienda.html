@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #cabecera{
+            display: flex;
+        }
+        #detalle {
+            display: flex;
+        }
+
+        .fotoJuego {
+            width: 150px;
+            height: 150px;
+        }
+
+        #carrusel {
+            width: 600px;
+        }
+
+        #carrito {
+            width: 50px;
+            background-image: url("carrito.jpg");
+            background-size: cover;
+            height: 50px;
+        }
+    </style>
+    <script src="jquery.min.js"></script>
+    <script>
+        let listaVideojuegos = [];
+        cont = 0;
+        function mostrarMasVideojuegos() {
+            if(listaVideojuegos[cont]){
+                $("#detalle").empty();
+                let div='';
+                for (let i = cont; i < cont+4; i++) {
+                    if(listaVideojuegos[i]){
+                        div = $(`<div></div>`).appendTo("#detalle");
+                        div.append(`<img  class='fotoJuego' src='${listaVideojuegos[i].foto}'>`);
+                        div.append(`<p>${listaVideojuegos[i].nombre}</p>`);
+                        div.append(`<p>${listaVideojuegos[i].precio}</p>`);
+                    }                
+                }
+                cont=cont+4;
+                div.append(`<button type="button" onclick="mostrarMasVideojuegos()">Ver más</button>`); 
+                div.append(`<button type="button" onclick="mostrarMenosVideojuegos()">Ver menos</button>`); 
+            }                    
+        }
+        function mostrarMenosVideojuegos() {
+            if(listaVideojuegos[cont-8]){
+                cont=cont-8;
+                $("#detalle").empty();
+                let div='';
+                for (let i = cont; i < cont+4; i++) {
+                    if(listaVideojuegos[i]){
+                        div = $(`<div></div>`).appendTo("#detalle");
+                        div.append(`<img  class='fotoJuego' src='${listaVideojuegos[i].foto}'>`);
+                        div.append(`<p>${listaVideojuegos[i].nombre}</p>`);
+                        div.append(`<p>${listaVideojuegos[i].precio}</p>`);
+                    }                
+                }
+                cont=cont+4;
+                div.append(`<button type="button" onclick="mostrarMasVideojuegos()">Ver más</button>`); 
+                div.append(`<button type="button" onclick="mostrarMenosVideojuegos()">Ver menos</button>`); 
+            }                    
+        }
+        function cargarVideojuegos() {
+            listaVideojuegos.push({ "nombre": "Dark Souls", "precio": 12, "foto": "juego1.jpg" });
+            listaVideojuegos.push({ "nombre": "Dark Souls 2", "precio": 12, "foto": "juego2.jpg" });
+            listaVideojuegos.push({ "nombre": "Dark Souls 3", "precio": 12, "foto": "juego3.jpg" });
+            listaVideojuegos.push({ "nombre": "Bloodborne", "precio": 12, "foto": "juego4.jpg" });
+            listaVideojuegos.push({ "nombre": "Elden Ring", "precio": 12, "foto": "juego5.jpg" });
+            listaVideojuegos.push({ "nombre": "Elden Ring", "precio": 12, "foto": "juego5.jpg" });
+            listaVideojuegos.push({ "nombre": "Elden Ring", "precio": 12, "foto": "juego5.jpg" });
+            listaVideojuegos.push({ "nombre": "Elden Ring", "precio": 12, "foto": "juego5.jpg" });
+            listaVideojuegos.push({ "nombre": "Elden Ring", "precio": 12, "foto": "juego5.jpg" });
+            listaVideojuegos.push({ "nombre": "Elden Ring", "precio": 12, "foto": "juego5.jpg" });
+            listaVideojuegos.push({ "nombre": "Elden Ring", "precio": 12, "foto": "juego5.jpg" });
+            listaVideojuegos.push({ "nombre": "Elden Ring", "precio": 12, "foto": "juego5.jpg" });
+        }
+        function actualizarCarrito() {
+            let lista = [];
+            if (localStorage.getItem("carrito")) {
+                lista = JSON.parse(localStorage.getItem("carrito"));
+            }
+            $("#carrito").empty();
+            $(`<h1>${lista.length}</h1>`).css({ "color": "red" }).appendTo("#carrito");
+        }
+        $(document).ready(() => {
+            $("<img src='carrusel.jpg'>").appendTo("#carrusel").css({ "width": "250px", "position": "absolute" }).animate({
+                left: 300,
+                width: "+=50px"
+            }, 2000);
+            actualizarCarrito();
+            cargarVideojuegos();
+            mostrarMasVideojuegos();
+        });
+    </script>
+</head>
+
+<body>
+    <div id="cabecera">
+        <div id="carrusel"></div>
+        <div id="carrito"></div>
+    </div>
+    <div id="detalle"></div>
+</body>
+
+</html>
