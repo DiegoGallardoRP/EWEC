@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles de Película</title>
+    <style>
+        body{
+            background-color: red;
+        }
+        .fotoPeli {
+            width: 150px;
+            height: 150px;
+        }
+
+        .fotoRecomendado {
+            width: 100px;
+            height: 100px;
+        }
+        .cruz{
+            width: 150px;
+            height: 150px;
+        }
+    </style>
+    <script>
+        function cargarPeli() {
+            let usuarioGuardado = sessionStorage.getItem("usuarioActual");
+            usuario = JSON.parse(usuarioGuardado);
+            const detallePeli = JSON.parse(sessionStorage.getItem("detallePeli"));
+            const listaPelis = JSON.parse(sessionStorage.getItem("listaPelis"));
+            if (detallePeli) {
+                document.getElementById("tituloPeli").textContent = detallePeli.titulo;
+                document.getElementById("directorPeli").textContent = detallePeli.director;
+                document.getElementById("categoriaPeli").textContent = detallePeli.categoria;
+                document.getElementById("fotoPeli").src = `./imagenes/${detallePeli.foto}`;
+                document.getElementById("fotoPeli").addEventListener("click", () => { location.href = detallePeli.link; });
+                document.getElementById("cruz").addEventListener("click", ()=>{anadirAListaPelis(detallePeli)});
+                let carruselPeli = '';
+                carruselPeli += `<ul><li>`;
+                listaPelis.forEach(peli => {
+                    if (peli.categoria == detallePeli.categoria && peli.titulo != detallePeli.titulo) {
+                        carruselPeli += `<img class="fotoRecomendado" src="./imagenes/${peli.foto}" onclick="mostrarPeliDetalle('${peli.titulo}')">`;
+                    }
+                })
+                carruselPeli += `</li></ul>`;
+                document.body.insertAdjacentHTML("beforeend", carruselPeli);
+            } else {
+                document.body.innerHTML = "<p>No se encontró la información de la película.</p>";
+            }
+        }
+        function anadirAListaPelis(peli){
+            let nombreUsuario=usuario.nombre;
+            let nombrePeli=peli.titulo;
+            var fecha = new Date();
+            fecha.setTime(fecha.getTime()+(7*24*60*60*1000));
+            document.cookie += nombreUsuario + '=' + nombrePeli + ';expires=' + fecha.toUTCString();
+            alert(document.cookie);
+        }
+        function mostrarPeliDetalle(titulo) {
+            const listaPelis = JSON.parse(sessionStorage.getItem("listaPelis"));
+            const peliSeleccionada = listaPelis.find(peli => peli.titulo == titulo);
+            if (peliSeleccionada) {
+                sessionStorage.setItem("detallePeli", JSON.stringify(peliSeleccionada));
+                location.href = "Pelicula.html";
+            }
+        }
+        onload = () => {
+            cargarPeli();
+        }
+    </script>
+</head>
+
+<body>
+    <h1 id="tituloPeli"></h1>
+    <p>Director: <span id="directorPeli"></span></p>
+    <p>Categoría: <span id="categoriaPeli"></span></p>
+    <img id="fotoPeli" class="fotoPeli" src="" alt="Poster de la película">
+    <img id="cruz" class="cruz" src="imagenes/cruz.png">
+
+
+</body>
+
+</html>
