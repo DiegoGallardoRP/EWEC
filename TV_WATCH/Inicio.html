@@ -24,12 +24,7 @@
             display: block;
         }
 
-        .fotoPeli {
-            height: 280px;
-            width: 170px;
-        }
-
-        .fotoSerie {
+        .fotoMulti {
             height: 280px;
             width: 170px;
         }
@@ -39,366 +34,217 @@
         }
     </style>
     <script src="./clases/Usuario.js"></script>
-    <script src="./clases/Peliculas.js"></script>
-    <script src="./clases/Series.js"></script>
+    <script src="./clases/Multimedia.js"></script>
     <script>
-        //Listas
-        var listaDePeliculas = [];
-        var listaDeSeries = [];
-        //Variables carrusel
-        let indicePaginaPelis = 0;
-        const pelisPorPagina = 5;
-        let indicePaginaSeries = 0;
-        const seriesPorPagina = 5;
+        esAdmin = false;
+        let listaMultimedia = [];
+        paginaActualPorCategoria = {};
+        const elementosPorPagina = 4;
+        let listaCategoria = ["listaUsuario", "Terror", "Ciencia Ficcion", "Comedia", "Animacion"];
+        let tipoSeleccionado = "todos";
 
         function mostrarUsuario() {
-            let usuarioGuardado = sessionStorage.getItem("usuarioActual");
-            if (usuarioGuardado) {
-                let usuario = JSON.parse(usuarioGuardado);
-                document.getElementById("nombreUsuario").textContent = "Bienvenido, " + usuario.nombre;
-                esAdmin = usuario.admin == "S";
-            }
-
+            let usuario = JSON.parse(sessionStorage.getItem("usuarioActual"));
+            if (usuario.admin == "S") esAdmin = true;
+            document.getElementById("nombreUsuario").textContent = `Bienvenido ${usuario.nombre}`;
         }
 
-        function cargarPeliculas() {
-            listaDePeliculas.push(new Pelicula("IT", "Stephen King",
-                "Terror", "it.jpg", "https://www.youtube.com/watch?v=_oBZ_zTz0Nw"));
-            listaDePeliculas.push(new Pelicula("Alien", "David Fincher",
-                "Terror", "alien.jpg", ""));
-            listaDePeliculas.push(new Pelicula("Inactividad Paranormal", "Michael Tiddes",
-                "Comedia", "inact.jpg", ""));
+        function cargarMultimedia() {
+            listaMultimedia.push(new Multimedia("peli", "IT", "Stephen King", "Terror", "it.jpg", "https://www.youtube.com/watch?v=_oBZ_zTz0Nw"));
+            listaMultimedia.push(new Multimedia("peli", "Alien", "David Fincher", "Terror", "alien.jpg", ""));
+            listaMultimedia.push(new Multimedia("peli", "Inactividad Paranormal", "Michael Tiddes", "Comedia", "inact.jpg", ""));
+            listaMultimedia.push(new Multimedia("serie", "Cómo conocí a vuestra madre", "Carter Bays Craig Thomas", "Comedia", "madre.jpg", "https://www.youtube.com/watch?v=90OxzHzvWSg"));
         }
 
-        function cargarSeries() {
-            listaDeSeries.push(new Serie("Cómo conocí a vuestra madre", "Carter Bays Craig Thomas",
-                "Comedia", "madre.jpg", "https://www.youtube.com/watch?v=90OxzHzvWSg"));
-        }
-
-        //Añadir Pelicula
-        function anadirPeli(categoria) {
-            categoriaNuevaPeli = categoria;
-            document.getElementById("divPeli").className = "visible";
-            document.getElementById("directorP").className = "visible";
-            document.getElementById("fotoP").className = "visible";
-            document.getElementById("botonBorrarPeli").className = "oculto";
-            document.getElementById("botonGuardarPeli").className = "visible";
-        }
-
-        //Añadir Serie
-        function anadirSerie(categoria) {
-            categoriaNuevaSerie = categoria;
-            document.getElementById("divSerie").className = "visible";
-            document.getElementById("directorS").className = "visible";
-            document.getElementById("fotoS").className = "visible";
-            document.getElementById("botonBorrarSerie").className = "oculto";
-            document.getElementById("botonGuardarSerie").className = "visible";
-        }
-
-        //Funcion pulsar boton guardar peli
-        function guardarPeli() {
-            let titulo = document.getElementById("nombrePeli").value;
-            let director = document.getElementById("directorPeli").value;
-            let foto = document.getElementById("fotoPeli").value;
-
-            if (titulo && director && foto) {
-                var nuevaPeli = new Pelicula(titulo, director, categoriaNuevaPeli, foto);
-                listaDePeliculas.push(nuevaPeli);
-                mostrarPeliculasPorCategoria();
-                document.getElementById("divPeli").className = "oculto";
-                document.getElementById("nombrePeli").value = "";
-                document.getElementById("directorPeli").value = "";
-                document.getElementById("fotoPeli").value = "";
-            } else {
-                alert("Por favor, rellena todos los campos");
-            }
-        }
-        //Funcion pulsar boton guardar serie
-        function guardarSerie() {
-            let titulo = document.getElementById("nombreSerie").value;
-            let director = document.getElementById("directorSerie").value;
-            let foto = document.getElementById("fotoSerie").value;
-
-            if (titulo && director && foto) {
-                var nuevaSerie = new Serie(titulo, director, categoriaNuevaSerie, foto);
-                listaDeSeries.push(nuevaSerie);
-                mostrarSeriesPorCategoria();
-                document.getElementById("divSerie").className = "oculto";
-                document.getElementById("nombreSerie").value = "";
-                document.getElementById("directorSerie").value = "";
-                document.getElementById("fotoSerie").value = "";
-            } else {
-                alert("Por favor, rellena todos los campos");
-            }
-        }
-
-        //Borrar peli/serie de una categoría
-        function mostrarDivPeli(categoria) {
-            categoriaPeli = categoria;
-            document.getElementById("divPeli").className = "visible";
-            document.getElementById("directorP").className = "oculto";
-            document.getElementById("fotoP").className = "oculto";
-            document.getElementById("botonGuardarPeli").className = "oculto";
-            document.getElementById("botonBorrarPeli").className = "visible";
-        }
-        function mostrarDivSerie(categoria) {
-            categoriaSerie = categoria;
-            document.getElementById("divSerie").className = "visible";
-            document.getElementById("directorS").className = "oculto";
-            document.getElementById("fotoS").className = "oculto";
-            document.getElementById("botonGuardarSerie").className = "oculto";
-            document.getElementById("botonBorrarSerie").className = "visible";
-        }
-
-        function borrarPeli() {
-            const titulo = document.getElementById("nombrePeli").value.trim();
-
-            const indice = listaDePeliculas.findIndex(peli => peli.titulo.toLowerCase() === titulo.toLowerCase());
-            if (indice !== -1) {
-                listaDePeliculas.splice(indice, 1);
-                mostrarPeliculasPorCategoria();
-                alert(`La película "${titulo}" ha sido eliminada.`);
-            } else {
-                alert("No se encontró ninguna película con ese título.");
-            }
-
-            document.getElementById("nombrePeli").value = "";
-            document.getElementById("directorPeli").value = "";
-            document.getElementById("fotoPeli").value = "";
-            document.getElementById("divPeli").className = "oculto";
-        }
-
-        function borrarSerie() {
-            const titulo = document.getElementById("nombreSerie").value.trim();
-
-            const indice = listaDeSeries.findIndex(serie => serie.titulo.toLowerCase() === titulo.toLowerCase());
-            if (indice !== -1) {
-                listaDeSeries.splice(indice, 1);
-                mostrarSeriesPorCategoria();
-                alert(`La serie "${titulo}" ha sido eliminada.`);
-            } else {
-                alert("No se encontró ninguna serie con ese título.");
-            }
-
-            document.getElementById("nombreSerie").value = "";
-            document.getElementById("directorSerie").value = "";
-            document.getElementById("fotoSerie").value = "";
-            document.getElementById("divSerie").className = "oculto";
-        }
-
-        //Método principal pelis
-        function mostrarPeliculasPorCategoria() {
-            mostrandoPelis = true;
-            mostrandoSeries = false;
-            let contenedorSeries = document.getElementById("series");
-            contenedorSeries.innerHTML = "";
-
-            if (document.getElementById("categoriaSeccion")) {
-                document.getElementById("categoriaSeccion").remove();
-            }
-
-            const categorias = ["Terror", "Ciencia Ficcion", "Comedia", "Animacion", "Accion"];
-            let contenedor = document.getElementById("peliculas");
+        //Funcion que muestra las pelis o series de cuatro en cuatro
+        function mostrarMultimediaPorCategoria(lista) {
+            let contenedor = document.getElementById("multimedia");
             contenedor.innerHTML = "";
-
-            categorias.forEach(categoria => {
-                let peliculasFiltradas = listaDePeliculas.filter(peli => peli.categoria === categoria);
-
-                if (peliculasFiltradas.length > 0) {
-                    const inicio = indicePaginaPelis * pelisPorPagina;
-                    const fin = inicio + pelisPorPagina;
-                    const peliculasPagina = peliculasFiltradas.slice(inicio, fin);
-
-                    let seccionCategoria = `<div id="categoriaSeccion">
-                                    <h2>${categoria}</h2>
-                                    <ul class="peliculas-list"><li>`;
-
-                    peliculasPagina.forEach(peli => {
-                        seccionCategoria += `<img src="./imagenes/${peli.foto}" alt="${peli.titulo}" class="fotoPeli" onclick="mostrarPeliDetalle('${peli.titulo}')">`
-                    });
-
-                    // Añadir la cruz si el usuario es administrador
+            if (document.getElementById("categoriaSeccion")) document.getElementById("categoriaSeccion").remove();
+            listaCategoria.forEach(categoria => {
+                let listaMultimediaFiltrada = lista.filter(multi => multi.categoria == categoria && (tipoSeleccionado == "todos" || multi.tipo == tipoSeleccionado));
+                if (!(categoria in paginaActualPorCategoria)) {
+                    paginaActualPorCategoria[categoria] = 0;
+                }
+                let inicio = paginaActualPorCategoria[categoria] * elementosPorPagina;
+                let fin = inicio + elementosPorPagina;
+                let elementosPagina = listaMultimediaFiltrada.slice(inicio, fin);
+                if (elementosPagina.length > 0) {
+                    let seccionCategoria = `<div id="${categoria}"><h2>${categoria}</h2><ul class="listaMultimedia"><li>`;
+                    elementosPagina.forEach(multi => {
+                        seccionCategoria += `<img src="./imagenes/${multi.foto}" class="fotoMulti" onclick="mostrarMultiDetalle('${multi.titulo}')">`;
+                    })
                     if (esAdmin) {
-                        seccionCategoria += `<img src="./imagenes/cruz.png" class="cruz" onclick="anadirPeli('${categoria}')">`;
-                        seccionCategoria += `<button type="button" onclick="mostrarDivPeli('${categoria}')">Borrar</button>`;
+                        seccionCategoria += `<img src="./imagenes/cruz.png" class="cruz" onclick="anadirMultimedia('${categoria}')">`;
+                        seccionCategoria += `<button type="button" onclick="borrarMultimedia('${categoria}')">Borrar</button>`;
                     }
-
-                    seccionCategoria += `</li></ul>`;
-                    seccionCategoria += `<div class="navegacion">
-                                    <button onclick="anteriorPagina('${categoria}')">&lt; Anterior</button>
-                                    <button onclick="siguientePagina('${categoria}', ${peliculasFiltradas.length})">Siguiente &gt;</button>
-                                 </div>
-                                 </div>`;
-
+                    seccionCategoria += '<p>';
+                    if (paginaActualPorCategoria[categoria] > 0) {
+                        seccionCategoria += `<button type="button" onclick="mostrarPaginaAnterior('${categoria}')">Página anterior</button>`;
+                    }
+                    if (fin < listaMultimediaFiltrada.length) {
+                        seccionCategoria += `<button type="button" onclick="mostrarPaginaSiguiente('${categoria}')">Página siguiente</button>`;
+                    }
+                    seccionCategoria += '</p>';
                     contenedor.insertAdjacentHTML("beforeend", seccionCategoria);
                 }
-            });
+            })
         }
-        //Funciones carrusel pelis
-        function anteriorPagina(categoria) {
-            if (indicePaginaPelis > 0) {
-                indicePaginaPelis--;
-                mostrarPeliculasPorCategoria();
+        //Funcion para mostrar solo pelis o series:
+        function cambiarTipoMulti(tipo) {
+            tipoSeleccionado = tipo;
+            paginaActualPorCategoria = {};
+            mostrarMultimediaPorCategoria(listaMultimedia);
+        }
+        //Funciones para moverse de página:
+        function mostrarPaginaAnterior(categoria) {
+            if (paginaActualPorCategoria[categoria] > 0) {
+                paginaActualPorCategoria[categoria]--;
+                mostrarMultimediaPorCategoria(listaMultimedia);
             }
+        }
+        function mostrarPaginaSiguiente(categoria) {
+            paginaActualPorCategoria[categoria]++;
+            mostrarMultimediaPorCategoria(listaMultimedia);
         }
 
-        function siguientePagina(categoria, totalPeliculas) {
-            const totalPaginas = Math.ceil(totalPeliculas / pelisPorPagina);
-            if (indicePaginaPelis < totalPaginas - 1) {
-                indicePaginaPelis++;
-                mostrarPeliculasPorCategoria();
-            }
-        }
-        //Método principal series
-        function mostrarSeriesPorCategoria() {
-            mostrandoPelis = false;
-            mostrandoSeries = true;
-            let contenedorPeliculas = document.getElementById("peliculas");
-            contenedorPeliculas.innerHTML = "";
-            if (document.getElementById("categoriaSeccion")) {
-                document.getElementById("categoriaSeccion").remove();
-            }
-            const categorias = ["Terror", "Ciencia Ficcion", "Comedia", "Animacion", "Accion"];
-            let contenedor = document.getElementById("series");
-            contenedor.innerHTML = "";
-
-            categorias.forEach(categoria => {
-                let seriesFiltradas = listaDeSeries.filter(serie => serie.categoria == categoria);
-                if (seriesFiltradas.length > 0) {
-                    const inicio = indicePaginaSeries * seriesPorPagina;
-                    const fin = inicio + seriesPorPagina;
-                    const seriesPagina = seriesFiltradas.slice(inicio, fin);
-                    let seccionCategoria = `<div id="categoriaSeccion">
-                            <h2>${categoria}</h2>
-                            <ul class="series-list"><li>`;
-                    seriesPagina.forEach(serie => {
-                        seccionCategoria += `<img src="./imagenes/${serie.foto}" alt="${serie.titulo}" class="fotoSerie" onclick="mostrarSerieDetalle('${serie.titulo}')">`
-                    });
-                    if (esAdmin) {
-                        seccionCategoria += `<img src="./imagenes/cruz.png" class="cruz" onclick="anadirSerie('${categoria}')">`;
-                        seccionCategoria += `<button type="button" onclick="mostrarDivSerie('${categoria}')">Borrar</button>`;
-                    }
-                    seccionCategoria += `</li></ul>`;
-                    seccionCategoria += `<div class="navegacion">
-                            <button onclick="anteriorPaginaSerie('${categoria}')">&lt; Anterior</button>
-                            <button onclick="siguientePaginaSerie('${categoria}', ${seriesFiltradas.length})">Siguiente &gt;</button>
-                         </div>
-                         </div>`;
-                    contenedor.insertAdjacentHTML("beforeend", seccionCategoria);
-                }
-            });
-        }
-
-        function mostrarPeliDetalle(titulo) {
-            const peliSeleccionada = listaDePeliculas.find(peli => peli.titulo === titulo);
-            sessionStorage.setItem("listaPelis",JSON.stringify(listaDePeliculas));
-            if (peliSeleccionada) {
-                sessionStorage.setItem("detallePeli", JSON.stringify(peliSeleccionada));
-                location.href = "Pelicula.html";
-            }
-        }
-
-        function mostrarSerieDetalle(titulo) {
-            const serieSeleccionada = listaDeSeries.find(serie => serie.titulo == titulo);
-
-            if (serieSeleccionada) {
-                sessionStorage.setItem("detalleSerie", JSON.stringify(serieSeleccionada));
-                location.href = "Serie.html";
-            }
-        }
-        //Carrusel series
-        function anteriorPaginaSerie(categoria) {
-            if (indicePaginaSeries > 0) {
-                indicePaginaSeries--;
-                mostrarSeriesPorCategoria();
-            }
-        }
-        function siguientePaginaSerie(categoria, totalSeries) {
-            const totalPaginas = Math.ceil(totalSeries / seriesPorPagina);
-            if (indicePaginaSeries < totalPaginas - 1) {
-                indicePaginaSeries++;
-                mostrarSeriesPorCategoria();
-            }
-        }
-        //Métodos que acompañan a la barra de búsqueda
-        function mostrarPeliculas(lista) {
-            if (document.getElementById("listaPelis")) {
-                document.getElementById("listaPelis").remove();
-            }
-            let contenedor = document.getElementById("peliculas");
-            contenedor.innerHTML = "";
-            let codigo = `<ul id="listaPelis" class="tabla">`;
-            lista.forEach((peli, indice, array) => {
-                codigo += `<li><img src="./imagenes/${peli.foto}" class="fotoPeli"> onclick="mostrarPeliDetalle('${peli.titulo}')"</li>`;
-            });
-            codigo += `</ul>`;
-            contenedor.insertAdjacentHTML("beforeend", codigo);
-        }
-
-        function mostrarSeries(lista) {
-            if (document.getElementById("listaSeries")) {
-                document.getElementById("listaSeries").remove();
-            }
-            let contenedor = document.getElementById("series");
-            contenedor.innerHTML = "";
-            let codigo = `<ul id="listaSeries" class="tabla">`;
-            lista.forEach((serie, indice, array) => {
-                codigo += `<li><img src="./imagenes/${serie.foto}" class="fotoSerie"> onclick="mostrarSerieDetalle('${serie.titulo}')"</li>`;
-            });
-            codigo += `</ul>`;
-            contenedor.insertAdjacentHTML("beforeend", codigo);
-        }
-        //Método barra de búsqueda
+        //Funcion barra de busqueda
         function filtrarPorTitulo() {
             let tituloBusqueda = document.getElementById("barraDeBusqueda").value;
-            if (tituloBusqueda == "") {
-                mostrarPeliculasPorCategoria();
-                mostrarSeriesPorCategoria(); // Asegurarse de mostrar las series también
+            if (tituloBusqueda != "") {
+                let contenedor = document.getElementById("multimedia");
+                contenedor.innerHTML = "";
+                var listaMultiFiltrada = listaMultimedia.filter((multi) => multi.titulo.toLocaleLowerCase().includes(tituloBusqueda.toLocaleLowerCase()));
+                let contenido = `<ul><li>`;
+                let cont = 1;
+                listaMultiFiltrada.forEach(multi => {
+                    contenido += `<img src="./imagenes/${multi.foto}" class="fotoMulti" onclick="mostrarMultiDetalle('${multi.titulo}')">`;
+                    if (cont == 5) {
+                        contenido += `<br>`;
+                        cont = 0;
+                    }
+                    cont++;
+                })
+                contenido += `</li></ul>`;
+                contenedor.insertAdjacentHTML("beforeend", contenido);
             } else {
-                var listaPelisFiltrada = listaDePeliculas.filter((peli) =>
-                    peli.titulo.toLocaleLowerCase().includes(tituloBusqueda.toLocaleLowerCase()));
-                var listaSeriesFiltrada = listaDeSeries.filter((serie) =>
-                    serie.titulo.toLocaleLowerCase().includes(tituloBusqueda.toLocaleLowerCase()));
-                mostrarPeliculas(listaPelisFiltrada);
-                mostrarSeries(listaSeriesFiltrada); // Mostrar las series filtradas
+                mostrarMultimediaPorCategoria(listaMultimedia);
             }
         }
-        //Método de filtrar por categoria
+
+        //Funcion categoria
         function filtrarPorCategoria() {
-            if (mostrandoPelis == true) {
-                filtrarPeliPorCategoria();
-            } else if (mostrandoSeries == true) {
-                filtrarSeriePorCategoria();
+            let categoria = document.getElementById("filtroCategoria").value;
+            if (categoria != "todas") {
+                let contenedor = document.getElementById("multimedia");
+                let cont = 1;
+                contenedor.innerHTML = "";
+                let contenido = "<ul><li>";
+                listaMultimedia.forEach(multi => {
+                    if (multi.categoria == categoria && (tipoSeleccionado == "todos" || multi.tipo == tipoSeleccionado)) {
+                        contenido += `<img src="./imagenes/${multi.foto}" class="fotoMulti" onclick="mostrarMultiDetalle('${multi.titulo}')">`;
+                        if (cont == 5) {
+                            contenido += "<br>";
+                            cont = 0;
+                        }
+                        cont++;
+                    }
+                })
+                contenido += `</li></ul>`;
+                contenedor.insertAdjacentHTML("beforeend", contenido);
+            } else {
+                mostrarMultimediaPorCategoria(listaMultimedia);
+            }
+
+        }
+
+        //Añadir 
+        function anadirMultimedia(categoria) {
+            document.getElementById("divMulti").className = "visible";
+            document.getElementById("botonGuardar").className = "visible";
+            document.getElementById("botonBorrar").className = "oculto";
+            document.getElementById("tipoMulti").className = "visible";
+            document.getElementById("directorMulti").className = "visible";
+            document.getElementById("fotoMulti").className = "visible";
+            document.getElementById("trailerMulti").className = "visible";
+            document.getElementById("botonGuardar").addEventListener("click", () => {
+                let tipo = document.querySelector("input[name='tipoMulti']:checked");
+                if (tipo && document.getElementById("nombre").value != "" && document.getElementById("director").value != "" && document.getElementById("trailer").value != "") {
+                    listaMultimedia.push(new Multimedia(tipo.value, document.getElementById("nombre").value, document.getElementById("director").value, categoria, document.getElementById("trailer").value))
+                    alert('Multimedia añadido');
+                    document.getElementById("divMulti").className = "oculto";
+                    mostrarMultimediaPorCategoria(listaMultimedia);
+                    document.getElementById("nombre").value = "";
+                    document.getElementById("director").value = "";
+                    document.getElementById("trailer").value = "";
+                } else {
+                    alert("Debe rellenar todos los datos");
+                }
+            });
+            document.getElementById("botonCancelar").addEventListener("click", () => { document.getElementById("divMulti").className = "oculto"; });
+        }
+        //Borrar
+        function borrarMultimedia(categoria) {
+            document.getElementById("divMulti").className = "visible";
+            document.getElementById("botonBorrar").className = "visible";
+            document.getElementById("botonGuardar").className = "oculto";
+            document.getElementById("tipoMulti").className = "oculto";
+            document.getElementById("directorMulti").className = "oculto";
+            document.getElementById("fotoMulti").className = "oculto";
+            document.getElementById("trailerMulti").className = "oculto";
+            document.getElementById("botonBorrar").addEventListener("click", () => {
+                let titulo = document.getElementById("nombre").value.trim();
+                let indice = listaMultimedia.findIndex(serie => serie.titulo.toLowerCase() === titulo.toLowerCase());
+                if (indice != -1) {
+                    listaMultimedia.splice(indice, 1);
+                    mostrarMultimediaPorCategoria(listaMultimedia);
+                    alert(`"${titulo}" ha sido eliminada.`);
+                    document.getElementById("divMulti").className = "oculto";
+                    document.getElementById("nombre").value = "";
+                } else {
+                    alert("No se encontró ese título");
+                }
+            });
+            document.getElementById("botonCancelar").addEventListener("click", () => { document.getElementById("divMulti").className = "oculto"; });
+        }
+
+        //Funcion detalle multimedia
+        function mostrarMultiDetalle(titulo) {
+            const multiSeleccionada = listaMultimedia.find(multi => multi.titulo === titulo);
+            sessionStorage.setItem("listaMulti", JSON.stringify(listaMultimedia));
+            if (multiSeleccionada) {
+                sessionStorage.setItem("detalleMulti", JSON.stringify(multiSeleccionada));
+                location.href = "MultimediaInfo.html";
             }
         }
-        //Método filtro pelis
-        function filtrarPeliPorCategoria() {
-            let categoria = document.getElementById("filtroCategoria").value;
-            if (categoria == "todas") {
-                mostrarPeliculas(listaDePeliculas);
-            } else {
-                let listaPelisFiltrada = listaDePeliculas.filter((peli) =>
-                    peli.categoria.toLowerCase() == categoria.toLowerCase());
-                mostrarPeliculas(listaPelisFiltrada);
-            }
-        }
-        //Método filtro series
-        function filtrarSeriePorCategoria() {
-            let categoria = document.getElementById("filtroCategoria").value;
-            if (categoria == "todas") {
-                mostrarSeries(listaDeSeries);
-            } else {
-                let listaSeriesFiltrada = listaDeSeries.filter((peli) =>
-                    peli.categoria.toLowerCase() == categoria.toLowerCase());
-                mostrarSeries(listaSeriesFiltrada);
-            }
+        //Funcion lista de peliculas del usuario
+        function obtenerMultimediaDeUsuario(usuario) {
+            const cookies = document.cookie.split(';');
+            let multimedias = [];
+            cookies.forEach(cookie => {
+                let cookieInfo = cookie.trim().split('=');
+                let nombreUsuario = cookieInfo[0];
+                let multimedia = cookieInfo[1];
+                if (nombreUsuario == usuario) {
+                    multimedias.push(multimedia);
+                }
+            });
+            multimedias.forEach(titulo => {
+                let multimediaExistente = listaMultimedia.find(multi => multi.titulo == titulo && multi.categoria == "listaUsuario");
+                if (!multimediaExistente) {
+                    let multi = listaMultimedia.find(multi => multi.titulo == titulo);
+                    if (multi) {
+                        listaMultimedia.push(new Multimedia(multi.tipo, multi.titulo, multi.director, "listaUsuario", multi.foto, multi.trailer));
+                    }
+                }
+            })
+            mostrarMultimediaPorCategoria(listaMultimedia);
         }
 
         window.onload = function () {
-            cargarPeliculas();
-            cargarSeries();
+            cargarMultimedia();
             mostrarUsuario();
-            mostrarPeliculasPorCategoria();
+            obtenerMultimediaDeUsuario(JSON.parse(sessionStorage.getItem("usuarioActual")));
         }
     </script>
 
@@ -409,34 +255,30 @@
         <ul>
             <li>
                 <img src="" id="perfil">
-                <img src="">
                 <p id="nombreUsuario"></p>
             </li>
             <li>
                 <input type="text" id="barraDeBusqueda" onkeyup="filtrarPorTitulo()">
-                <img href="" id="lupa">
             </li>
             <ul>
-                <li><a href="#" onclick="mostrarPeliculasPorCategoria()">Películas</a></li>
-                <li><a href="#" onclick="mostrarSeriesPorCategoria()">Series</a></li>
+                <li><a href="#" onclick="cambiarTipoMulti('todos')">Todos</a></li>
+                <li><a href="#" onclick="cambiarTipoMulti('peli')">Películas</a></li>
+                <li><a href="#" onclick="cambiarTipoMulti('serie')">Series</a></li>
             </ul>
         </ul>
 
     </nav>
     <!-- Divs que solo se muestra a los admin -->
-    <div class="oculto" id="divPeli">
-        <p>Titulo: <input type="text" id="nombrePeli"></p>
-        <p id="directorP">Director: <input type="text" id="directorPeli"></p>
-        <p id="fotoP">Foto: <input type="text" id="fotoPeli"></p>
-        <button onclick="guardarPeli()" id="botonGuardarPeli">Guardar Película</button>
-        <button onclick="borrarPeli()" id="botonBorrarPeli">Borrar Película</button>
-    </div>
-    <div class="oculto" id="divSerie">
-        <p>Titulo: <input type="text" id="nombreSerie"></p>
-        <p id="directorS">Director: <input type="text" id="directorSerie"></p>
-        <p id="fotoS">Foto: <input type="text" id="fotoSerie"></p>
-        <button onclick="guardarSerie()" id="botonGuardarSerie">Guardar Serie</button>
-        <button onclick="borrarSerie()" id="botonBorrarSerie">Borrar Serie</button>
+    <div class="oculto" id="divMulti">
+        <p id="tipoMulti">Tipo de multimedia: <input type='radio' name="tipoMulti" value="peli">peli<input type='radio'
+                name="tipoMulti" value="serie">serie</p>
+        <p>Titulo: <input type="text" id="nombre"></p>
+        <p id="directorMulti">Director: <input type="text" id="director"></p>
+        <p id="fotoMulti">Foto: <input type="text" id="fotoPeli"></p>
+        <p id="trailerMulti">Trailer: <input type="text" id="trailer"></p>
+        <button id="botonGuardar">Guardar</button>
+        <button id="botonBorrar">Borrar</button>
+        <button id="botonCancelar">Cancelar</button>
     </div>
     <p>
         Categorías:
@@ -449,8 +291,7 @@
         </select>
     </p>
     <!-- Div pelis y series -->
-    <div id="peliculas"></div>
-    <div id="series"></div>
+    <div id="multimedia"></div>
 </body>
 
 </html>

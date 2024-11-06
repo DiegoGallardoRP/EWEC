@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles de Película</title>
+    <style>
+        body{
+            background-color: red;
+        }
+        .fotoSerie {
+            width: 150px;
+            height: 150px;
+        }
+
+        .fotoRecomendado {
+            width: 100px;
+            height: 100px;
+        }
+        .cruz{
+            width: 150px;
+            height: 150px;
+        }
+    </style>
+    <script>
+        function cargarMultimedia() {
+            let usuarioGuardado = sessionStorage.getItem("usuarioActual");
+            usuario = JSON.parse(usuarioGuardado);
+            const detalleMulti = JSON.parse(sessionStorage.getItem("detalleMulti"));
+            const listaMulti = JSON.parse(sessionStorage.getItem("listaMulti"));
+            if (detalleMulti) {
+                document.getElementById("tituloMulti").textContent = detalleMulti.titulo;
+                document.getElementById("directorMulti").textContent = detalleMulti.director;
+                document.getElementById("categoriaMulti").textContent = detalleMulti.categoria;
+                document.getElementById("fotoMulti").src = `./imagenes/${detalleMulti.foto}`;
+                document.getElementById("fotoMulti").addEventListener("click", () => { location.href = detalleMulti.link; });
+                document.getElementById("cruz").addEventListener("click", ()=>{anadirAListaMulti(detalleMulti)});
+                let carruselMulti = '';
+                carruselMulti += `<ul><li>`;
+                listaMulti.forEach(multi => {
+                    if (multi.categoria == detalleMulti.categoria && multi.titulo != detalleMulti.titulo) {
+                        carruselMulti += `<img class="fotoRecomendado" src="./imagenes/${multi.foto}" onclick="mostrarMultiDetalle('${multi.titulo}')">`;
+                    }
+                })
+                carruselMulti += `</li></ul>`;
+                document.body.insertAdjacentHTML("beforeend", carruselMulti);
+            } else {
+                document.body.innerHTML = "<p>No se encontró la información.</p>";
+            }
+        }
+        function anadirAListaMulti(multi){
+            let nombreUsuario=usuario.nombre;
+            let nombreMulti=multi.titulo;
+            var fecha = new Date();
+            fecha.setTime(fecha.getTime()+(7*24*60*60*1000));
+            document.cookie += nombreUsuario + '=' + nombreMulti + ';expires=' + fecha.toUTCString();
+            alert(document.cookie);
+        }
+        function mostrarMultiDetalle(titulo) {
+            const listaMulti = JSON.parse(sessionStorage.getItem("listaMulti"));
+            const multiSeleccionada = listaMulti.find(multi => multi.titulo == titulo);
+            if (multiSeleccionada) {
+                sessionStorage.setItem("detalleMulti", JSON.stringify(multiSeleccionada));
+                location.href = "MultimediaInfo.html";
+            }
+        }
+        onload = () => {
+            cargarMultimedia();
+        }
+    </script>
+</head>
+
+<body>
+    <h1 id="tituloMulti"></h1>
+    <p>Director: <span id="directorMulti"></span></p>
+    <p>Categoría: <span id="categoriaMulti"></span></p>
+    <img id="fotoMulti" class="fotoMulti" src="">
+    <img id="cruz" class="cruz" src="imagenes/cruz.png">
+
+</body>
+
+</html>
