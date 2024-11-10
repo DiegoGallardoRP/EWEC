@@ -4,8 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="./css/">
+    <title>TV WATCH</title>
     <style>
         body {
             background-color: red;
@@ -40,13 +39,17 @@
         let listaMultimedia = [];
         paginaActualPorCategoria = {};
         const elementosPorPagina = 4;
-        let listaCategoria = ["listaUsuario", "Terror", "Ciencia Ficcion", "Comedia", "Animacion"];
+        let listaCategoria = ["Mi lista", "Terror", "Ciencia Ficcion", "Comedia", "Animacion"];
         let tipoSeleccionado = "todos";
 
         function mostrarUsuario() {
             let usuario = JSON.parse(sessionStorage.getItem("usuarioActual"));
             if (usuario.admin == "S") esAdmin = true;
             document.getElementById("nombreUsuario").textContent = `Bienvenido ${usuario.nombre}`;
+            document.getElementById("perfil").addEventListener("click",()=>{location.href="Ajustes_Usuario"});
+            if(esAdmin){
+                document.getElementById("ajustesAdmin").className="visible";
+            }
         }
 
         function cargarMultimedia() {
@@ -160,17 +163,75 @@
 
         //Añadir 
         function anadirMultimedia(categoria) {
+            categoriaGlobal=categoria;
+            document.getElementById("divMulti").className = "oculto";
             document.getElementById("divMulti").className = "visible";
             document.getElementById("botonGuardar").className = "visible";
-            document.getElementById("botonBorrar").className = "oculto";
-            document.getElementById("tipoMulti").className = "visible";
-            document.getElementById("directorMulti").className = "visible";
-            document.getElementById("fotoMulti").className = "visible";
-            document.getElementById("trailerMulti").className = "visible";
+            document.getElementById("datosGuardar").className = "visible";
+            document.getElementById("botonBorrar").className = "oculto";            
+            document.getElementById("botonCancelar").addEventListener("click", () => { document.getElementById("divMulti").className = "oculto"; });
+        }
+        //Borrar
+        function borrarMultimedia(categoria) {
+            categoriaGlobal=categoria;
+            document.getElementById("divMulti").className = "visible";
+            document.getElementById("botonBorrar").className = "visible";
+            document.getElementById("datosGuardar").className = "oculto";
+            document.getElementById("botonGuardar").className = "oculto";
+            document.getElementById("botonCancelar").addEventListener("click", () => { document.getElementById("divMulti").className = "oculto"; });
+        }
+
+        //Funcion detalle multimedia
+        function mostrarMultiDetalle(titulo) {
+            const multiSeleccionada = listaMultimedia.find(multi => multi.titulo == titulo);
+            sessionStorage.setItem("listaMulti", JSON.stringify(listaMultimedia));
+            if (multiSeleccionada) {
+                sessionStorage.setItem("detalleMulti", JSON.stringify(multiSeleccionada));
+                location.href = "MultimediaInfo.html";
+            }
+        }
+        //Funcion lista de peliculas del usuario
+        function obtenerMultimediaDeUsuario(usuario) {
+            let usuarioCodigo = usuario.codigo;
+            let listaMultimediaUsuario = JSON.parse(localStorage.getItem(`lista${usuarioCodigo}`)) || [];
+            if (listaMultimediaUsuario.length > 0) {
+                listaMultimediaUsuario.forEach(multi => {
+                    if (listaMultimedia.findIndex(M => multi.titulo.toLowerCase() == M.titulo.toLowerCase() && multi.categoria == M.categoria) == -1) {
+                        listaMultimedia.push(new Multimedia(multi.tipo, multi.titulo, multi.director, multi.categoria, multi.foto, multi.link));
+                    }
+                })
+            }
+            mostrarMultimediaPorCategoria(listaMultimedia);
+        }
+
+        function verSubscripción(){
+            let usuario = JSON.parse(sessionStorage.getItem("usuarioActual"));
+            localStorage.setItem("usuarioASuscribirse",JSON.stringify(usuario));
+            location.href="Subscripcion.html";
+        }
+
+        onload = () => {
+            cargarMultimedia();
+            mostrarUsuario();
+            obtenerMultimediaDeUsuario(JSON.parse(sessionStorage.getItem("usuarioActual")));
+            //Crear los eventos para los botones
+            document.getElementById("botonBorrar").addEventListener("click",()=>{
+                let titulo = document.getElementById("nombre").value.trim();
+                let indice = listaMultimedia.findIndex(multi => multi.titulo.toLowerCase() == titulo.toLowerCase() && multi.categoria == categoriaGlobal);
+                if (indice !== -1) {
+                    listaMultimedia.splice(indice, 1);
+                    mostrarMultimediaPorCategoria(listaMultimedia);
+                    alert(`"${titulo}" ha sido eliminada.`);
+                    document.getElementById("divMulti").className = "oculto";
+                    document.getElementById("nombre").value = "";
+                } else {
+                    alert("No se encontró ese título");
+                }
+            });
             document.getElementById("botonGuardar").addEventListener("click", () => {
                 let tipo = document.querySelector("input[name='tipoMulti']:checked");
                 if (tipo && document.getElementById("nombre").value != "" && document.getElementById("director").value != "" && document.getElementById("trailer").value != "") {
-                    listaMultimedia.push(new Multimedia(tipo.value, document.getElementById("nombre").value, document.getElementById("director").value, categoria, document.getElementById("trailer").value))
+                    listaMultimedia.push(new Multimedia(tipo.value, document.getElementById("nombre").value, document.getElementById("director").value, categoriaGlobal, document.getElementById("trailer").value))
                     alert('Multimedia añadido');
                     document.getElementById("divMulti").className = "oculto";
                     mostrarMultimediaPorCategoria(listaMultimedia);
@@ -181,70 +242,6 @@
                     alert("Debe rellenar todos los datos");
                 }
             });
-            document.getElementById("botonCancelar").addEventListener("click", () => { document.getElementById("divMulti").className = "oculto"; });
-        }
-        //Borrar
-        function borrarMultimedia(categoria) {
-            document.getElementById("divMulti").className = "visible";
-            document.getElementById("botonBorrar").className = "visible";
-            document.getElementById("botonGuardar").className = "oculto";
-            document.getElementById("tipoMulti").className = "oculto";
-            document.getElementById("directorMulti").className = "oculto";
-            document.getElementById("fotoMulti").className = "oculto";
-            document.getElementById("trailerMulti").className = "oculto";
-            document.getElementById("botonBorrar").addEventListener("click", () => {
-                let titulo = document.getElementById("nombre").value.trim();
-                let indice = listaMultimedia.findIndex(serie => serie.titulo.toLowerCase() === titulo.toLowerCase());
-                if (indice != -1) {
-                    listaMultimedia.splice(indice, 1);
-                    mostrarMultimediaPorCategoria(listaMultimedia);
-                    alert(`"${titulo}" ha sido eliminada.`);
-                    document.getElementById("divMulti").className = "oculto";
-                    document.getElementById("nombre").value = "";
-                } else {
-                    alert("No se encontró ese título");
-                }
-            });
-            document.getElementById("botonCancelar").addEventListener("click", () => { document.getElementById("divMulti").className = "oculto"; });
-        }
-
-        //Funcion detalle multimedia
-        function mostrarMultiDetalle(titulo) {
-            const multiSeleccionada = listaMultimedia.find(multi => multi.titulo === titulo);
-            sessionStorage.setItem("listaMulti", JSON.stringify(listaMultimedia));
-            if (multiSeleccionada) {
-                sessionStorage.setItem("detalleMulti", JSON.stringify(multiSeleccionada));
-                location.href = "MultimediaInfo.html";
-            }
-        }
-        //Funcion lista de peliculas del usuario
-        function obtenerMultimediaDeUsuario(usuario) {
-            const cookies = document.cookie.split(';');
-            let multimedias = [];
-            cookies.forEach(cookie => {
-                let cookieInfo = cookie.trim().split('=');
-                let nombreUsuario = cookieInfo[0];
-                let multimedia = cookieInfo[1];
-                if (nombreUsuario == usuario) {
-                    multimedias.push(multimedia);
-                }
-            });
-            multimedias.forEach(titulo => {
-                let multimediaExistente = listaMultimedia.find(multi => multi.titulo == titulo && multi.categoria == "listaUsuario");
-                if (!multimediaExistente) {
-                    let multi = listaMultimedia.find(multi => multi.titulo == titulo);
-                    if (multi) {
-                        listaMultimedia.push(new Multimedia(multi.tipo, multi.titulo, multi.director, "listaUsuario", multi.foto, multi.trailer));
-                    }
-                }
-            })
-            mostrarMultimediaPorCategoria(listaMultimedia);
-        }
-
-        window.onload = function () {
-            cargarMultimedia();
-            mostrarUsuario();
-            obtenerMultimediaDeUsuario(JSON.parse(sessionStorage.getItem("usuarioActual")));
         }
     </script>
 
@@ -256,6 +253,12 @@
             <li>
                 <img src="" id="perfil">
                 <p id="nombreUsuario"></p>
+                <p>
+                    <a href="Ajustes_Usuario.html">Ajustes</a>
+                    <a href="Ajustes_Admin.html" class="oculto" id="ajustesAdmin">Ajustes Administradores</a>
+                    <a href="Soporte.html">Soporte</a>
+                    <a href="#" onclick="verSubscripción()">Subscripción</a>
+                </p>
             </li>
             <li>
                 <input type="text" id="barraDeBusqueda" onkeyup="filtrarPorTitulo()">
@@ -270,12 +273,14 @@
     </nav>
     <!-- Divs que solo se muestra a los admin -->
     <div class="oculto" id="divMulti">
-        <p id="tipoMulti">Tipo de multimedia: <input type='radio' name="tipoMulti" value="peli">peli<input type='radio'
-                name="tipoMulti" value="serie">serie</p>
+
         <p>Titulo: <input type="text" id="nombre"></p>
-        <p id="directorMulti">Director: <input type="text" id="director"></p>
-        <p id="fotoMulti">Foto: <input type="text" id="fotoPeli"></p>
-        <p id="trailerMulti">Trailer: <input type="text" id="trailer"></p>
+        <div id="datosGuardar">
+            <p>Tipo de multimedia: <input type='radio' name="tipoMulti" value="peli">peli<input type='radio' name="tipoMulti" value="serie">serie</p>
+            <p>Director: <input type="text" id="director"></p>
+            <p>Foto: <input type="text" id="fotoPeli"></p>
+            <p>Trailer: <input type="text" id="trailer"></p>
+        </div>
         <button id="botonGuardar">Guardar</button>
         <button id="botonBorrar">Borrar</button>
         <button id="botonCancelar">Cancelar</button>
