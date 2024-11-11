@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registrarse - Inflix</title>
+    <title>Registrarse - TV WAYCH</title>
     <style>
         .oculto {
             display: none;
         }
+
         .visible {
             display: block;
             color: red;
@@ -15,58 +17,68 @@
     </style>
     <script src="./clases/Usuario.js"></script>
     <script>
-        function cargarUsuarios() {
-            let listaUsuarios = JSON.parse(localStorage.getItem("listaUsuarios")) || [];
-            return listaUsuarios;
+        function enviarDatos() {
+            let nombre = document.getElementById("nombre").value.trim();
+            let correo = document.getElementById("correo").value.trim();
+            let clave1 = document.getElementById("clave1").value;
+            let clave2 = document.getElementById("clave2").value;
+            let fecha = document.getElementById("fecha").value;
+            let fechaNacimiento = new Date(document.getElementById("fecha").value);
+
+            let patronCorreo = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+            let fechaActual = new Date();
+            let edad = fechaActual.getFullYear() - fechaNacimiento.getFullYear();
+
+            if (clave1 !== clave2 || nombre == "" || clave1 == "" || correo == "") {
+                document.getElementById("error").className = "visible";
+            } else if (!patronCorreo.test(correo) || correo == "") {
+                document.getElementById("errorCorreo").className = "visible";
+            } else if (fecha == "" || edad < 18) {
+                document.getElementById("errorFecha").className = "visible";
+            } else {
+                let listaUsuarios = JSON.parse(localStorage.getItem("listaUsuarios"));
+                let usuarioExistente = listaUsuarios.find((usuario) => usuario.nombre == nombre && usuario.correo == correo);
+
+                if (usuarioExistente) {
+                    alert("Este usuario ya está registrado.");
+                } else {
+                    let nuevoUsuario = new Usuario(
+                        String(listaUsuarios.length + 1),
+                        clave1,
+                        nombre,
+                        correo
+                    );
+                    guardarUsuario(nuevoUsuario);
+                    location.href = "Subscripcion.html";
+                }
+            }
         }
 
         function guardarUsuario(usuario) {
-            let listaUsuarios = cargarUsuarios();
+            let listaUsuarios = JSON.parse(localStorage.getItem("listaUsuarios"));
             listaUsuarios.push(usuario);
             localStorage.setItem("listaUsuarios", JSON.stringify(listaUsuarios));
+            localStorage.setItem("usuarioASuscribirse",JSON.stringify(usuario));
         }
 
-        function enviarDatos() {
-            let nombre = document.getElementById("nombre").value;
-            let correo = document.getElementById("correo").value;
-            let clave1 = document.getElementById("clave1").value;
-            let clave2 = document.getElementById("clave2").value;
 
-            if (clave1 !== clave2) {
-                document.getElementById("error").className = "visible";
-                return;
-            }
-
-            let listaUsuarios = cargarUsuarios();
-            let usuarioExistente = listaUsuarios.find((usuario) => usuario.nombre === nombre || usuario.correo === correo);
-
-            if (usuarioExistente) {
-                alert("Este nombre de usuario o correo ya está registrado.");
-            } else {
-                let nuevoUsuario = new Usuario(
-                    String(listaUsuarios.length + 1).padStart(4, "0"),
-                    clave1,
-                    nombre,
-                    correo,
-                    "N",
-                    "A"  
-                );
-                guardarUsuario(nuevoUsuario);
-                location.href = "Inicio_sesion.html";
-            }
-        }
     </script>
 </head>
+
 <body>
     <center>
         <h1>REGISTRATE</h1>
-        <p>Por favor introduzca el usuario, la contraseña y el correo electrónico:</p>
-        <input type="text" id="nombre" placeholder="Introduzca su nombre" /> </br>
-        <input type="text" id="correo" placeholder="Introduzca su correo" /> </br>
-        <input type="password" id="clave1" placeholder="Contraseña" /> </br>
-        <input type="password" id="clave2" placeholder="Confirma contraseña" /> </br>
+        <h3>Por favor introduzca el usuario, la contraseña y el correo electrónico:</h3>
+        <p>Nombre de usuario: <input type="text" id="nombre" placeholder="Introduzca su nombre" /></p>
+        <p>Correo: <input type="text" id="correo" placeholder="Introduzca su correo" /></p>
+        <p id="errorCorreo" class="oculto">El correo no es válido</p>
+        <p>Fecha de nacimiento: <input type="date" id="fecha" /></p>
+        <p id="errorFecha" class="oculto">La fecha de nacimiento no es válida</p>
+        <p>Contraseña: <input type="password" id="clave1" placeholder="Contraseña" /></p>
+        <p>Confirmar contraseña: <input type="password" id="clave2" placeholder="Confirma contraseña" /></p>
         <p id="error" class="oculto">El usuario y/o la clave son erroneos</p>
         <button type="button" onclick="enviarDatos()">Enviar</button>
     </center>
 </body>
+
 </html>

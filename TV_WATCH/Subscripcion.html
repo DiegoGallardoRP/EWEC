@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscripcion - TV WATCH</title>
+    <style>
+        .oculto {
+            display: none;
+        }
+
+        .botonVisible{
+            display: block;
+        }
+
+        .visible {
+            display: block;
+            color: red;
+        }
+    </style>
+    <script>
+        function suscribirse() {
+            let subscripcion = document.querySelector("input[name='subscripcion']:checked");
+            if (subscripcion) {
+                let indice = listaUsuarios.findIndex((usuario) => usuario.codigo == usuarioASuscribirse.codigo);
+                let fechaActual = new Date()
+                let mes = fechaActual.getMonth();
+                let year = fechaActual.getFullYear();
+                let dia = fechaActual.getDate();
+                if (subscripcion.value == "estandar") {                    
+                    mes=mes+1;
+                    if(mes>12){
+                        mes=mes-12;
+                        year=year+1;
+                    }
+                }
+                if (subscripcion.value == "superior") {
+                    mes=mes+5;
+                    if(mes>12){
+                        mes=mes-12;
+                        year=year+1;
+                    }
+                }
+                if (subscripcion.value == "premium") {
+                    year=year+1;
+                }
+                listaUsuarios[indice].tipoSub=subscripcion.value;
+                listaUsuarios[indice].fechaFin=`${year}-${mes}-${dia}`;
+                localStorage.setItem("listaUsuarios", JSON.stringify(listaUsuarios));
+                location.href="Inicio_sesion.html";
+            } else {
+                document.getElementById("error").className = "visible";
+            }
+        }
+        function cambiarSub(){
+            let subscripcion = document.querySelector("input[name='subscripcion']:checked");
+            if (subscripcion) {
+                let indice = listaUsuarios.findIndex((usuario) => usuario.codigo == usuarioASuscribirse.codigo);
+                let fechaActualFin = new Date(`${usuarioASuscribirse.fechaFin}`)
+                let mes = fechaActualFin.getMonth();
+                let year = fechaActualFin.getFullYear();
+                let dia = fechaActualFin.getDate();
+                if (subscripcion.value == "estandar") {                    
+                    mes=mes+1;
+                    if(mes>12){
+                        mes=mes-12;
+                        year=year+1;
+                    }
+                }
+                if (subscripcion.value == "superior") {
+                    mes=mes+5;
+                    if(mes>12){
+                        mes=mes-12;
+                        year=year+1;
+                    }
+                }
+                if (subscripcion.value == "premium") {
+                    year=year+1;
+                }
+                listaUsuarios[indice].tipoSub=subscripcion.value;
+                listaUsuarios[indice].fechaFin=`${year}-${mes}-${dia}`;
+                localStorage.setItem("listaUsuarios", JSON.stringify(listaUsuarios));
+                location.href="Inicio_sesion.html";
+            } else {
+                document.getElementById("error").className = "visible";
+            }
+        }
+        onload = () => {
+            listaUsuarios = JSON.parse(localStorage.getItem("listaUsuarios"));
+            usuarioASuscribirse = JSON.parse(localStorage.getItem("usuarioASuscribirse"));
+            if(usuarioASuscribirse.tipoSub==""){
+                document.getElementById("botonSub").className="botonVisible";
+                document.getElementById("botonSub").addEventListener("click", suscribirse);
+            }else{   
+                let contenedor=document.getElementById("subscripcionActual");
+                let contenido=`Subscripcion actual: ${usuarioASuscribirse.tipoSub}`           
+                document.getElementById("botonCamSub").className="botonVisible";
+                document.getElementById("botonCamSub").addEventListener("click", cambiarSub);
+                contenedor.insertAdjacentHTML("beforeend",contenido);
+            }
+            
+            
+        }
+    </script>
+</head>
+
+<body>
+    <h1>Métodos de pago</h1>
+    <p id="subscripcionActual"></p>
+    <ul>
+        <li>
+            <h3>Subscripción estándar</h3>
+            <p>Subscripción estándar de 1 mes</p>
+            <p>5€/mes</p>
+            <p><input type='radio' name='subscripcion' value="estandar"></p>
+        </li>
+        <li>
+            <h3>Subscripción superior</h3>
+            <p>Subscripción superior de 5 meses</p>
+            <p>22,99€/mes</p>
+            <p><input type='radio' name='subscripcion' value="superior"></p>
+        </li>
+        <li>
+            <h3>Subscripción premium</h3>
+            <p>Subscripción premium de 12 meses</p>
+            <p>110,99€/mes</p>
+            <p><input type='radio' name='subscripcion' value="premium"></p>
+        </li>
+    </ul>
+    <p id="error" class="oculto">Por favor seleccione una subscripción</p>
+    <button type="button" id="botonSub" class="oculto">Suscribirse</button>
+    <button type="button" id="botonCamSub" class="oculto">Cambiar subscripción</button>
+</body>
+
+</html>
