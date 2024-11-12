@@ -8,8 +8,24 @@ class Multimedia {
         this.foto = foto;
         this.link = link || "";
     }
-    //Editar peli
-    
+    //Editar multimedia
+    editarMultimedia(nuevoTipo,nuevoTitulo,nuevoDirector,nuevaCategoria,nuevaFoto,nuevoLink,listaMultimedia){
+        this.tipo=nuevoTipo;
+        this.titulo=nuevoTitulo;
+        this.director=nuevoDirector;
+        this.categoria=nuevaCategoria;
+        this.foto=nuevaFoto;
+        this.link=nuevoLink;
+
+        //buscar el índice de multimedia a editar
+        let indice=listaMultimedia.findIndex(multi=>multi.titulo==this.titulo);
+        if(indice!=-1){
+            listaMultimedia[indice]=this;
+            localStorage.setItem("listaMultimedia",JSON.stringify(listaMultimedia));
+            return true;
+        }
+        return false;
+    }
     //Mostrar Info multimedia
     mostrarDetalles() {
         document.getElementById("tituloMulti").textContent = this.titulo;
@@ -17,9 +33,7 @@ class Multimedia {
         document.getElementById("categoriaMulti").textContent = this.categoria;
         document.getElementById("fotoMulti").src = `./imagenes/${this.foto}`;
         document.getElementById("fotoMulti").addEventListener("click", () => { 
-            if (this.link) {
-                window.open(this.link, "_blank");
-            }
+            location.href=`this.link`;
         });
     }
     //añadir peli a lista del usuario

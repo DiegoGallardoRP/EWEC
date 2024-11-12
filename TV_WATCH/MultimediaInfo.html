@@ -26,61 +26,7 @@
         }
     </style>
     <script src="./clases/Multimedia.js"></script>
-    <script>
-        function mostrarUsuario() {
-            let usuario = JSON.parse(sessionStorage.getItem("usuarioActual"));
-            document.getElementById("nombreUsuario").textContent = `${usuario.nombre}`;
-        }
-        function cargarMultimedia() {
-            let detalleMulti = JSON.parse(sessionStorage.getItem("detalleMulti"));
-            const listaMulti = JSON.parse(sessionStorage.getItem("listaMulti"));
-            if (detalleMulti) {
-                    detalleMulti = new Multimedia(
-                    detalleMulti.tipo,
-                    detalleMulti.titulo,
-                    detalleMulti.director,
-                    detalleMulti.categoria,
-                    detalleMulti.foto,
-                    detalleMulti.link
-                );
-                // Llamar al método mostrarDetalles para actualizar la página
-                detalleMulti.mostrarDetalles();
-                document.getElementById("cruz").addEventListener("click", () => { anadirAListaMulti(detalleMulti) });
-                let carruselMulti = '';
-                carruselMulti += `<ul><li>`;
-                listaMulti.forEach(multi => {
-                    if (multi.categoria == detalleMulti.categoria && multi.titulo != detalleMulti.titulo) {
-                        carruselMulti += `<img class="fotoRecomendado" src="./imagenes/${multi.foto}" onclick="mostrarMultiDetalle('${multi.titulo}')">`;
-                    }
-                })
-                carruselMulti += `</li></ul>`;
-                document.body.insertAdjacentHTML("beforeend", carruselMulti);
-            } else {
-                document.body.innerHTML = "<p>No se encontró la información.</p>";
-            }
-        }
-        function anadirAListaMulti(multiData) {
-            //Guardo la peli en una lista que está en localStorage
-            let codigoUsuario = usuario.codigo;
-            let multi = new Multimedia(multiData.tipo, multiData.titulo, multiData.director, "Mi lista", multiData.foto, multiData.link)
-            multi.anadirAMiLista(codigoUsuario);
-        }
-
-        function mostrarMultiDetalle(titulo) {
-            const listaMulti = JSON.parse(sessionStorage.getItem("listaMulti"));
-            const multiSeleccionada = listaMulti.find(multi => multi.titulo == titulo);
-            if (multiSeleccionada) {
-                sessionStorage.setItem("detalleMulti", JSON.stringify(multiSeleccionada));
-                location.href = "MultimediaInfo.html";
-            }
-        }
-        onload = () => {
-            let usuarioGuardado = sessionStorage.getItem("usuarioActual");
-            usuario = JSON.parse(usuarioGuardado);
-            mostrarUsuario();
-            cargarMultimedia();
-        }
-    </script>
+    <script src="./js/MultimediaInfo.js"></script>
 </head>
 
 <body>

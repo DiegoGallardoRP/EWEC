@@ -5,68 +5,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ajustes Admin - TV WATCH</title>
+    <style>
+
+    </style>
     <script src="./clases/Usuario.js"></script>
-    <script>
-        function mostrarUsuarios() {
-            let contenedor = document.getElementById("usuarios");
-            listaUsuarios.forEach(usuario => {
-                if (usuario.admin != "S") {
-                    let contenido = '';
-                    contenido += `<p>Codigo: <input type="text" id="codigo${usuario.codigo}"></p>`;
-                    contenido += `<p>Nombre: <input type="text" id="nombre${usuario.codigo}"></p>`;
-                    contenido += `<p>Correo: <input type="text" id="correo${usuario.codigo}"></p>`;
-                    contenido += `<p>Tipo de subscripcion: <input type="text" id="tipoSub${usuario.codigo}"></p>`;
-                    contenido += `<p>Fecha fin subscripción: <input type="text" id="fechaFin${usuario.codigo}"></p><br>`;
-
-                    contenedor.insertAdjacentHTML("beforeend", contenido);
-
-                    document.getElementById(`codigo${usuario.codigo}`).value = usuario.codigo;
-                    document.getElementById(`nombre${usuario.codigo}`).value = usuario.nombre;
-                    document.getElementById(`correo${usuario.codigo}`).value = usuario.correo;
-                    document.getElementById(`tipoSub${usuario.codigo}`).value = usuario.tipoSub;
-                    document.getElementById(`fechaFin${usuario.codigo}`).value = usuario.fechaFin;
-                }
-            })
-
-        }
-        function modificarUsuarios() {
-            listaUsuarios.forEach(usuario => {
-                if (usuario.admin != "S") {
-                    let usuarioActual = usuario;
-                    let indice = listaUsuarios.findIndex((usuario) => usuario.codigo == usuarioActual.codigo);
-                    let nuevoCodigo = document.getElementById(`codigo${usuario.codigo}`).value.trim();
-                    let nuevoNombre = document.getElementById(`nombre${usuario.codigo}`).value.trim();
-                    let nuevoCorreo = document.getElementById(`correo${usuario.codigo}`).value.trim();
-                    let nuevoTipoSub = document.getElementById(`tipoSub${usuario.codigo}`).value.trim();
-                    let nuevaFechaFin = document.getElementById(`fechaFin${usuario.codigo}`).value.trim();
-
-                    usuario.editarUsuario(nuevoCodigo,nuevoNombre,nuevoCorreo,usuario.clave,nuevoTipoSub,nuevaFechaFin,listaUsuarios);
-                }
-
-            })
-            localStorage.setItem("listaUsuarios", JSON.stringify(listaUsuarios));
-            console.log(listaUsuarios);
-            alert("Se han modificado los usuarios");
-        }
-        onload = () => {
-            listaUsuarios = JSON.parse(localStorage.getItem("listaUsuarios")).map(
-                usuarioData => new Usuario(
-                usuarioData.codigo,
-                usuarioData.clave,
-                usuarioData.nombre,
-                usuarioData.correo,
-                usuarioData.tipoSub,
-                usuarioData.fechaFin,
-                usuarioData.admin
-            ));
-            mostrarUsuarios();
-        }
-    </script>
+    <script src="./clases/Multimedia.js"></script>
+    <script src="./js/Ajustes_Admin.js"></script>
 </head>
 
 <body>
     <div id="usuarios"></div>
     <button type="button" onclick="modificarUsuarios()">Modificar usuarios</button>
+    <div id="multimedia"></div>
+    <button type="button" onclick="modificarMultimedia()">Modificar Multimedia</button>
+    
 </body>
 
 </html>
