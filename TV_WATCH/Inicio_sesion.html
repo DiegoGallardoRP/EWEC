@@ -6,70 +6,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio Sesion - TV WATCH</title>
     <style>
-        .oculto {
-            display: none;
+        body {
+            background-color: #1f4468;
         }
 
-        .visible {
-            display: block;
+        div {
+            margin-top: 20%;
+            background-color: #2c5d8f;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        a:hover {
+            background-color: #575757;
+            color: #fff;
+        }
+
+        a {
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .error {
             color: red;
         }
     </style>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
     <script src="./clases/Usuario.js"></script>
-    <script>
-        var listaUsuarios = JSON.parse(localStorage.getItem("listaUsuarios"));
-        function cargarUsuarios() {
-            if (!listaUsuarios) {
-                listaUsuarios = [
-                    new Usuario("1", "1234", "Diego", "Diego@tv.com", "estandar", "2024-12-11", "S"),
-                    new Usuario("2", "1234", "Michael", "Michael@tv.com",),
-                    new Usuario("3", "1234", "James", "James@tv.com", "premium", "2025-11-11", "N")
-                ];
-
-                localStorage.setItem("listaUsuarios", JSON.stringify(listaUsuarios));
-            }
-            return listaUsuarios;
-        }
-        cargarUsuarios();
-
-        function comprobarDatos() {
-            let nombre = document.getElementById("nombre").value;
-            let clave = document.getElementById("clave").value;
-            let usuarioEncontrado = listaUsuarios.find((usuario) => usuario.nombre == nombre && usuario.clave == clave);
-            if (usuarioEncontrado) {
-                //Reconstruir usuarioEnconrtrado para usar la función de fecha
-                usuarioEncontrado = new Usuario(usuarioEncontrado.codigo,usuarioEncontrado.clave,usuarioEncontrado.nombre,usuarioEncontrado.correo,usuarioEncontrado.tipoSub,
-                usuarioEncontrado.fechaFin,usuarioEncontrado.admin);
-                sessionStorage.setItem("usuarioActual", JSON.stringify(usuarioEncontrado));
-
-                if (usuarioEncontrado.tieneSuscripcionActiva()) {
-                    location.href = "Inicio.html";
-                } else {
-                    localStorage.setItem("usuarioASuscribirse", JSON.stringify(usuarioEncontrado));
-                    location.href = "Subscripcion.html";
-                }
-            } else {
-                document.getElementById("error").className = "visible";
-            }
-        }
-        function ocultar() {
-            document.getElementById("error").className = "oculto";
-        }
-    </script>
+    <script src="./js/Inicio_sesion.js"></script>
 </head>
 
 <body>
     <center>
-        <h1>INICIA SESIÓN</h1>
-        <p>
-            Por favor introduzca el usuario y la contraseña:
-        </p>
-        <input type="text" id="nombre" placeholder="Introduzca su nombre"> </br>
-        <input type="password" id="clave" placeholder="Contraseña"> </br>
-        <p id="error" class="oculto">El usuario y/o la clave son erroneos</p>
-        <p><a href="Nueva_cuenta.html">Registrate</a><button type="button" onclick="comprobarDatos()">Enviar</button>
-        </p>
-
+        <div>
+            <h1>INICIA SESIÓN</h1>
+            <p>
+                Por favor introduzca el usuario y la contraseña:
+            </p>
+            <input type="text" id="nombre" placeholder="Introduzca su nombre"> </br>
+            <input type="password" id="clave" placeholder="Contraseña"> </br>
+            <p class="error">El usuario y/o la clave son erroneos <a class="errorX">x</a></p>
+            <p><a href="Nueva_cuenta.html">Registrate</a><button type="button" id="botonEnviar">Enviar</button></p>
+        </div>
     </center>
 </body>
 

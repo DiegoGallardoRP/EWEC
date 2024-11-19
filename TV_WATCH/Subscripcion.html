@@ -6,108 +6,110 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Subscripcion - TV WATCH</title>
     <style>
-        .oculto {
+        nav {
+            background-color: #0c1b2a;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        nav ul {
+            display: flex;
+            list-style-type: none;
+            padding: 0;
+        }
+
+        nav ul li a:hover {
+            background-color: #575757;
+            color: #fff;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        ul {
+            list-style-type: none;
+        }
+
+        .logoTV {
+            height: 100px;
+            width: 100px;
+        }
+
+        body {
+            background-color: #1f4468;
+        }
+
+        .perfil {
+            height: 80px;
+            width: 80px;
+        }
+
+        /* .oculto {
             display: none;
+        } */
+
+        .cruz {
+            height: 150px;
+            width: 150px;
+        }
+
+        /* .visible {
+            display: block;
+        } */
+
+        .fotoMulti {
+            height: 280px;
+            width: 170px;
+        }
+
+        ul {
+            display: inline;
+        }
+
+        nav>ul{
+            list-style-type: none;
         }
 
         .botonVisible{
             display: block;
         }
-
-        .visible {
-            display: block;
-            color: red;
-        }
     </style>
-    <script>
-        function suscribirse() {
-            let subscripcion = document.querySelector("input[name='subscripcion']:checked");
-            if (subscripcion) {
-                let indice = listaUsuarios.findIndex((usuario) => usuario.codigo == usuarioASuscribirse.codigo);
-                let fechaActual = new Date()
-                let mes = fechaActual.getMonth();
-                let year = fechaActual.getFullYear();
-                let dia = fechaActual.getDate();
-                if (subscripcion.value == "estandar") {                    
-                    mes=mes+1;
-                    if(mes>12){
-                        mes=mes-12;
-                        year=year+1;
-                    }
-                }
-                if (subscripcion.value == "superior") {
-                    mes=mes+5;
-                    if(mes>12){
-                        mes=mes-12;
-                        year=year+1;
-                    }
-                }
-                if (subscripcion.value == "premium") {
-                    year=year+1;
-                }
-                listaUsuarios[indice].tipoSub=subscripcion.value;
-                listaUsuarios[indice].fechaFin=`${year}-${mes}-${dia}`;
-                localStorage.setItem("listaUsuarios", JSON.stringify(listaUsuarios));
-                location.href="Inicio_sesion.html";
-            } else {
-                document.getElementById("error").className = "visible";
-            }
-        }
-        function cambiarSub(){
-            let subscripcion = document.querySelector("input[name='subscripcion']:checked");
-            if (subscripcion) {
-                let indice = listaUsuarios.findIndex((usuario) => usuario.codigo == usuarioASuscribirse.codigo);
-                let fechaActualFin = new Date(`${usuarioASuscribirse.fechaFin}`)
-                let mes = fechaActualFin.getMonth();
-                let year = fechaActualFin.getFullYear();
-                let dia = fechaActualFin.getDate();
-                if (subscripcion.value == "estandar") {                    
-                    mes=mes+1;
-                    if(mes>12){
-                        mes=mes-12;
-                        year=year+1;
-                    }
-                }
-                if (subscripcion.value == "superior") {
-                    mes=mes+5;
-                    if(mes>12){
-                        mes=mes-12;
-                        year=year+1;
-                    }
-                }
-                if (subscripcion.value == "premium") {
-                    year=year+1;
-                }
-                listaUsuarios[indice].tipoSub=subscripcion.value;
-                listaUsuarios[indice].fechaFin=`${year}-${mes}-${dia}`;
-                localStorage.setItem("listaUsuarios", JSON.stringify(listaUsuarios));
-                location.href="Inicio_sesion.html";
-            } else {
-                document.getElementById("error").className = "visible";
-            }
-        }
-        onload = () => {
-            listaUsuarios = JSON.parse(localStorage.getItem("listaUsuarios"));
-            usuarioASuscribirse = JSON.parse(localStorage.getItem("usuarioASuscribirse"));
-            if(usuarioASuscribirse.tipoSub==""){
-                document.getElementById("botonSub").className="botonVisible";
-                document.getElementById("botonSub").addEventListener("click", suscribirse);
-            }else{   
-                let contenedor=document.getElementById("subscripcionActual");
-                let contenido=`Subscripcion actual: ${usuarioASuscribirse.tipoSub}`           
-                document.getElementById("botonCamSub").className="botonVisible";
-                document.getElementById("botonCamSub").addEventListener("click", cambiarSub);
-                contenedor.insertAdjacentHTML("beforeend",contenido);
-            }
-            
-            
-        }
-    </script>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
+    <script src="./js/Subscripcion.js"></script>
 </head>
 
 <body>
     <h1>Métodos de pago</h1>
     <p id="subscripcionActual"></p>
+    <nav id="navegador">
+        <img src="./imagenes/logoTV.png" class="logoTV">
+        <ul>
+            <li>
+                <img src="./imagenes/perfil.png" id="perfil">
+                <p id="nombreUsuario"></p>
+                <p>
+                    <a href="Inicio.html">Inicio</a>
+                    <a href="Ajustes_Usuario.html">Ajustes</a>
+                    <a href="Ajustes_Admin.html" class="oculto" id="ajustesAdmin">Ajustes Administradores</a>
+                    <a href="Soporte.html">Soporte</a>
+                    <a href="Inicio_sesion.html">Cerrar sesión</a>
+                </p>
+            </li>
+        </ul>
+    </nav>
     <ul>
         <li>
             <h3>Subscripción estándar</h3>
@@ -128,7 +130,16 @@
             <p><input type='radio' name='subscripcion' value="premium"></p>
         </li>
     </ul>
-    <p id="error" class="oculto">Por favor seleccione una subscripción</p>
+    <p id="errorSub">Por favor seleccione una subscripción</p>
+    <div id="datosTarjeta">
+        <h2>Datos de la Tarjeta</h2>
+        <p>Número de Tarjeta:<input type="text" id="numeroTarjeta" maxlength="16" placeholder="Ej: 4111111111111111"></p>
+        <p>Nombre del Titular:<input type="text" id="titularTarjeta" placeholder="Ej: Juan Pérez"></p>
+        <p>Fecha de Expiración:<input type="text" id="fechaExpiracion" maxlength="5" placeholder="MM/YY"></p>
+        <p>CVV:<input type="text" id="cvvTarjeta" maxlength="3" placeholder="123"></p>
+    </div>
+    <p id="errorTar">Alguno de los datos de la tarjeta es erroneo</p>
+
     <button type="button" id="botonSub" class="oculto">Suscribirse</button>
     <button type="button" id="botonCamSub" class="oculto">Cambiar subscripción</button>
 </body>

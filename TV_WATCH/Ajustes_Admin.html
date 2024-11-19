@@ -5,68 +5,166 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ajustes Admin - TV WATCH</title>
+    <style>
+        nav {
+            background-color: #0c1b2a;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        nav ul {
+            display: flex;
+            list-style-type: none;
+            padding: 0;
+        }
+
+        nav ul li a:hover {
+            background-color: #575757;
+            color: #fff;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        ul {
+            list-style-type: none;
+        }
+
+        .logoTV {
+            height: 100px;
+            width: 100px;
+        }
+
+        body {
+            background-color: #1f4468;
+        }
+
+        .perfil {
+            height: 80px;
+            width: 80px;
+        }
+
+        /* .oculto {
+            display: none;
+        } */
+
+        .cruz {
+            height: 150px;
+            width: 150px;
+        }
+
+        /* .visible {
+            display: block;
+        } */
+
+        .fotoMulti {
+            height: 280px;
+            width: 170px;
+        }
+
+        ul {
+            display: inline;
+        }
+        table{
+            color:white;
+            background-color: #295886;
+        }
+        input{
+            color:white;
+            background-color: #3e75ad;
+        }
+
+        .papelera,
+        .lapiz {
+            height: 50px;
+            width: 50px;
+        }
+    </style>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
     <script src="./clases/Usuario.js"></script>
-    <script>
-        function mostrarUsuarios() {
-            let contenedor = document.getElementById("usuarios");
-            listaUsuarios.forEach(usuario => {
-                if (usuario.admin != "S") {
-                    let contenido = '';
-                    contenido += `<p>Codigo: <input type="text" id="codigo${usuario.codigo}"></p>`;
-                    contenido += `<p>Nombre: <input type="text" id="nombre${usuario.codigo}"></p>`;
-                    contenido += `<p>Correo: <input type="text" id="correo${usuario.codigo}"></p>`;
-                    contenido += `<p>Tipo de subscripcion: <input type="text" id="tipoSub${usuario.codigo}"></p>`;
-                    contenido += `<p>Fecha fin subscripción: <input type="text" id="fechaFin${usuario.codigo}"></p><br>`;
-
-                    contenedor.insertAdjacentHTML("beforeend", contenido);
-
-                    document.getElementById(`codigo${usuario.codigo}`).value = usuario.codigo;
-                    document.getElementById(`nombre${usuario.codigo}`).value = usuario.nombre;
-                    document.getElementById(`correo${usuario.codigo}`).value = usuario.correo;
-                    document.getElementById(`tipoSub${usuario.codigo}`).value = usuario.tipoSub;
-                    document.getElementById(`fechaFin${usuario.codigo}`).value = usuario.fechaFin;
-                }
-            })
-
-        }
-        function modificarUsuarios() {
-            listaUsuarios.forEach(usuario => {
-                if (usuario.admin != "S") {
-                    let usuarioActual = usuario;
-                    let indice = listaUsuarios.findIndex((usuario) => usuario.codigo == usuarioActual.codigo);
-                    let nuevoCodigo = document.getElementById(`codigo${usuario.codigo}`).value.trim();
-                    let nuevoNombre = document.getElementById(`nombre${usuario.codigo}`).value.trim();
-                    let nuevoCorreo = document.getElementById(`correo${usuario.codigo}`).value.trim();
-                    let nuevoTipoSub = document.getElementById(`tipoSub${usuario.codigo}`).value.trim();
-                    let nuevaFechaFin = document.getElementById(`fechaFin${usuario.codigo}`).value.trim();
-
-                    usuario.editarUsuario(nuevoCodigo,nuevoNombre,nuevoCorreo,usuario.clave,nuevoTipoSub,nuevaFechaFin,listaUsuarios);
-                }
-
-            })
-            localStorage.setItem("listaUsuarios", JSON.stringify(listaUsuarios));
-            console.log(listaUsuarios);
-            alert("Se han modificado los usuarios");
-        }
-        onload = () => {
-            listaUsuarios = JSON.parse(localStorage.getItem("listaUsuarios")).map(
-                usuarioData => new Usuario(
-                usuarioData.codigo,
-                usuarioData.clave,
-                usuarioData.nombre,
-                usuarioData.correo,
-                usuarioData.tipoSub,
-                usuarioData.fechaFin,
-                usuarioData.admin
-            ));
-            mostrarUsuarios();
-        }
-    </script>
+    <script src="./clases/Multimedia.js"></script>
+    <script src="./js/Ajustes_Admin.js"></script>
 </head>
 
 <body>
+    <nav>
+        <a href="Inicio.html"><img src="./imagenes/logoTV.png" class="logoTV"></a>
+        <ul>
+            <li>
+                <img src="./imagenes/perfil.png" class="perfil">
+                <p id="nombreUsuarioActual"></p>
+                <p>
+                    <a href="Inicio.html">Inicio</a>                    
+                    <a href="Ajustes_Usuario.html">Ajustes</a>
+                    <a href="Soporte.html">Soporte</a>
+                    <a href="#" onclick="verSubscripción()">Subscripción</a>
+                    <a href="Inicio_sesion.html">Cerrar sesión</a>
+                </p>
+            </li>
+        </ul>
+    </nav>
     <div id="usuarios"></div>
-    <button type="button" onclick="modificarUsuarios()">Modificar usuarios</button>
+    <p>
+        <button type="button" onclick="modificarUsuarios()">Modificar usuarios</button>
+        <button type="button" onclick="mostrarDivNuevoUsuario()">Crear usuario</button>
+    </p>
+
+    <div id="nuevoUsuario">
+        <h1>Nuevo usuario</h1>
+        <p>Clave: <input type="text" id="claveUsuario"></p>
+        <p>Nombre: <input type="text" id="nombreUsuario"></p>
+        <p>Correo: <input type="text" id="correoUsuario"></p>
+        <p>¿Es administrador?
+            <input type="radio" name="admin" value="S">Sí
+            <input type="radio" name="admin" value="N">No
+        </p>
+        <p>
+            <button type="button" onclick="crearUsuario()">Crear usuario</button>
+            <button type="button" onclick="cancelarUsuario()">Cancelar</button>
+        </p>
+    </div>
+    
+    <div id="multimedia"></div>
+    <p>
+        <button type="button" onclick="modificarMultimedia()">Modificar Multimedia</button>
+        <button type="button" onclick="mostrarDivNuevaMultimedia()">Crear multimedia</button>
+    </p>
+
+    <div id="nuevaMultimedia">
+        <h1>Nueva Multimedia</h1>
+        <p>Tipo de multimedia:
+            <input type='radio' name="tipoMulti" value="peli">peli
+            <input type='radio' name="tipoMulti" value="serie">serie
+        </p>
+        <p>Título: <input type="text" id="titulo"></p>
+        <p>Director: <input type="text" id="director"></p>
+        <p>
+            <input type="radio" name="categoria" value="Terror">Terror
+            <input type="radio" name="categoria" value="Ciencia Ficcion">Ciencia Ficcion
+            <input type="radio" name="categoria" value="Comedia">Comedia
+            <input type="radio" name="categoria" value="Accion">Accion
+            <input type="radio" name="categoria" value="Animacion">Animacion
+        </p>
+        <p>Foto: <input type="text" id="fotoPeli"></p>
+        <p>Trailer: <input type="text" id="trailer"></p>
+        <p>
+            <button type="button" onclick="crearMultimedia()">Crear multimedia</button>
+            <button type="button" onclick="cancelarMultimedia()">Cancelar</button>
+        </p>
+    </div>
 </body>
 
 </html>

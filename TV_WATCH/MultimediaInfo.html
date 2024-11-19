@@ -6,13 +6,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalles de Película</title>
     <style>
-        body {
-            background-color: red;
+        nav {
+            background-color: #0c1b2a;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
+        nav ul {
+            display: flex;
+            list-style-type: none;
+            padding: 0;
+        }
+
+        nav ul li a:hover {
+            background-color: #575757;
+            color: #fff;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        ul {
+            list-style-type: none;
+        }
+        .logoTV{
+            height: 100px;
+            width: 100px;
+        }
+        .perfil{
+            height: 80px;
+            width: 80px;
+        }
+        body {
+            background-color: #1f4468;
+        }
         .fotoSerie {
             width: 150px;
             height: 150px;
+        }
+        .x,.cruz{
+            width: 250px;
+            height: 250px;
         }
 
         .fotoRecomendado {
@@ -25,65 +72,29 @@
             height: 150px;
         }
     </style>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
     <script src="./clases/Multimedia.js"></script>
-    <script>
-        function mostrarUsuario() {
-            let usuario = JSON.parse(sessionStorage.getItem("usuarioActual"));
-            document.getElementById("nombreUsuario").textContent = `${usuario.nombre}`;
-        }
-        function cargarMultimedia() {
-            let detalleMulti = JSON.parse(sessionStorage.getItem("detalleMulti"));
-            const listaMulti = JSON.parse(sessionStorage.getItem("listaMulti"));
-            if (detalleMulti) {
-                    detalleMulti = new Multimedia(
-                    detalleMulti.tipo,
-                    detalleMulti.titulo,
-                    detalleMulti.director,
-                    detalleMulti.categoria,
-                    detalleMulti.foto,
-                    detalleMulti.link
-                );
-                // Llamar al método mostrarDetalles para actualizar la página
-                detalleMulti.mostrarDetalles();
-                document.getElementById("cruz").addEventListener("click", () => { anadirAListaMulti(detalleMulti) });
-                let carruselMulti = '';
-                carruselMulti += `<ul><li>`;
-                listaMulti.forEach(multi => {
-                    if (multi.categoria == detalleMulti.categoria && multi.titulo != detalleMulti.titulo) {
-                        carruselMulti += `<img class="fotoRecomendado" src="./imagenes/${multi.foto}" onclick="mostrarMultiDetalle('${multi.titulo}')">`;
-                    }
-                })
-                carruselMulti += `</li></ul>`;
-                document.body.insertAdjacentHTML("beforeend", carruselMulti);
-            } else {
-                document.body.innerHTML = "<p>No se encontró la información.</p>";
-            }
-        }
-        function anadirAListaMulti(multiData) {
-            //Guardo la peli en una lista que está en localStorage
-            let codigoUsuario = usuario.codigo;
-            let multi = new Multimedia(multiData.tipo, multiData.titulo, multiData.director, "Mi lista", multiData.foto, multiData.link)
-            multi.anadirAMiLista(codigoUsuario);
-        }
-
-        function mostrarMultiDetalle(titulo) {
-            const listaMulti = JSON.parse(sessionStorage.getItem("listaMulti"));
-            const multiSeleccionada = listaMulti.find(multi => multi.titulo == titulo);
-            if (multiSeleccionada) {
-                sessionStorage.setItem("detalleMulti", JSON.stringify(multiSeleccionada));
-                location.href = "MultimediaInfo.html";
-            }
-        }
-        onload = () => {
-            let usuarioGuardado = sessionStorage.getItem("usuarioActual");
-            usuario = JSON.parse(usuarioGuardado);
-            mostrarUsuario();
-            cargarMultimedia();
-        }
-    </script>
+    <script src="./js/MultimediaInfo.js"></script>
 </head>
 
 <body>
+    <nav>
+        <img src="./imagenes/logoTV.png" class="logoTV">
+        <ul>
+            <li>
+                <img src="./imagenes/perfil.png" class="perfil">
+                <p id="nombreUsuario"></p>
+                <p>
+                    <a href="Inicio.html">Inicio</a>
+                    <a href="Ajustes_Usuario.html">Ajustes</a>
+                    <a href="Ajustes_Admin.html" class="oculto" id="ajustesAdmin">Ajustes Administradores</a>
+                    <a href="Soporte.html">Soporte</a>
+                    <a href="#" onclick="verSubscripción()">Subscripción</a>
+                    <a href="Inicio_sesion.html">Cerrar sesión</a>
+                </p>
+            </li>
+        </ul>
+    </nav>
     <div>
         <img src="" id="perfil">
         <p id="nombreUsuario"></p>
@@ -94,6 +105,11 @@
     <p>Categoría: <span id="categoriaMulti"></span></p>
     <img id="fotoMulti" class="fotoMulti" src="">
     <img id="cruz" class="cruz" src="imagenes/cruz.png">
+    <img id="x" class="x" src="imagenes/x.png">
+
+    <div id="pelisSimilares">
+        
+    </div>
 
 </body>
 

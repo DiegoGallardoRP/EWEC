@@ -6,78 +6,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrarse - TV WAYCH</title>
     <style>
-        .oculto {
-            display: none;
+        body {
+            background-color: #1f4468;
         }
 
-        .visible {
-            display: block;
-            color: red;
+        div {
+            margin-top: 20%;
+            background-color: #2c5d8f;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
         }
+
     </style>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
     <script src="./clases/Usuario.js"></script>
-    <script>
-        function enviarDatos() {
-            let nombre = document.getElementById("nombre").value.trim();
-            let correo = document.getElementById("correo").value.trim();
-            let clave1 = document.getElementById("clave1").value;
-            let clave2 = document.getElementById("clave2").value;
-            let fecha = document.getElementById("fecha").value;
-            let fechaNacimiento = new Date(document.getElementById("fecha").value);
-
-            let patronCorreo = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-            let fechaActual = new Date();
-            let edad = fechaActual.getFullYear() - fechaNacimiento.getFullYear();
-
-            if (clave1 !== clave2 || nombre == "" || clave1 == "" || correo == "") {
-                document.getElementById("error").className = "visible";
-            } else if (!patronCorreo.test(correo) || correo == "") {
-                document.getElementById("errorCorreo").className = "visible";
-            } else if (fecha == "" || edad < 18) {
-                document.getElementById("errorFecha").className = "visible";
-            } else {
-                let listaUsuarios = JSON.parse(localStorage.getItem("listaUsuarios"));
-                let usuarioExistente = listaUsuarios.find((usuario) => usuario.nombre == nombre && usuario.correo == correo);
-
-                if (usuarioExistente) {
-                    alert("Este usuario ya está registrado.");
-                } else {
-                    let nuevoUsuario = new Usuario(
-                        String(listaUsuarios.length + 1),
-                        clave1,
-                        nombre,
-                        correo
-                    );
-                    guardarUsuario(nuevoUsuario);
-                    location.href = "Subscripcion.html";
-                }
-            }
-        }
-
-        function guardarUsuario(usuario) {
-            let listaUsuarios = JSON.parse(localStorage.getItem("listaUsuarios"));
-            listaUsuarios.push(usuario);
-            localStorage.setItem("listaUsuarios", JSON.stringify(listaUsuarios));
-            localStorage.setItem("usuarioASuscribirse",JSON.stringify(usuario));
-        }
-
-
-    </script>
+    <script src="./js/Nueva_cuenta.js"></script>
 </head>
 
 <body>
     <center>
+        <div>
         <h1>REGISTRATE</h1>
         <h3>Por favor introduzca el usuario, la contraseña y el correo electrónico:</h3>
         <p>Nombre de usuario: <input type="text" id="nombre" placeholder="Introduzca su nombre" /></p>
         <p>Correo: <input type="text" id="correo" placeholder="Introduzca su correo" /></p>
-        <p id="errorCorreo" class="oculto">El correo no es válido</p>
+
+        <p class="errorCorreo" class="oculto">El correo no es válido <a class="errorCorreo">x</a></p>
+
         <p>Fecha de nacimiento: <input type="date" id="fecha" /></p>
-        <p id="errorFecha" class="oculto">La fecha de nacimiento no es válida</p>
+
+        <p class="errorFecha" class="oculto">La fecha de nacimiento no es válida <a class="errorFecha">x</a></p>
+
         <p>Contraseña: <input type="password" id="clave1" placeholder="Contraseña" /></p>
         <p>Confirmar contraseña: <input type="password" id="clave2" placeholder="Confirma contraseña" /></p>
-        <p id="error" class="oculto">El usuario y/o la clave son erroneos</p>
+
+        <p class="error" class="oculto">El usuario y/o la clave son erroneos <a class="error">x</a></p>
         <button type="button" onclick="enviarDatos()">Enviar</button>
+        </div>
     </center>
 </body>
 

@@ -5,57 +5,105 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ajustes usuario - TV WATCH</title>
     <style>
-        .oculto {
-            display: none;
+        nav {
+            background-color: #0c1b2a;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        .visible {
+        nav ul {
+            display: flex;
+            list-style-type: none;
+            padding: 0;
+        }
+
+        nav ul li a:hover {
+            background-color: #575757;
+            color: #fff;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        ul {
+            list-style-type: none;
+        }
+
+        .logoTV {
+            height: 100px;
+            width: 100px;
+        }
+
+        body {
+            background-color: #1f4468;
+        }
+
+        .perfil {
+            height: 80px;
+            width: 80px;
+        }
+
+        /* .oculto {
+            display: none;
+        } */
+
+        .cruz {
+            height: 150px;
+            width: 150px;
+        }
+
+        /* .visible {
             display: block;
+        } */
+
+        .fotoMulti {
+            height: 280px;
+            width: 170px;
+        }
+
+        ul {
+            display: inline;
+        }       
+
+        #error {
+            
             color: red;
         }
     </style>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
     <script src="./clases/Usuario.js"></script>
-    <script>     
-        function aceptarCambios(lista){
-            let nombre=document.getElementById("nombre").value.trim();
-            let correo=document.getElementById("correo").value.trim();
-            let nuevaClave=document.getElementById("claveNueva").value.trim();
-            let claveActual=document.getElementById("claveActual").value.trim();
-            let claveActual2=document.getElementById("claveActual2").value.trim();
-            let patronCorreo = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-            
-            if(nombre!=""&&correo!=""&&patronCorreo.test(correo)&&claveActual==claveActual2&&nuevaClave!=""){
-                let exito=usuarioActual.editarUsuario(usuarioActual.codigo,nombre,correo,nuevaClave,
-                usuarioActual.tipoSub,usuarioActual.fechaFin,listaUsuarios);
-                if(exito){
-                    alert("Cambios realizados");
-                    location.href="Inicio.html";  
-                }else{
-                    alert("ERROR: Los cambios no se han realizado");
-                }                
-            }else{
-                document.getElementById("error").className="visible";
-            }
-            
-        }
-        onload=()=>{
-            usuarioActual=JSON.parse(sessionStorage.getItem("usuarioActual"));
-            listaUsuarios=JSON.parse(localStorage.getItem("listaUsuarios"));
-            //Transformar el usuarioActual
-            usuarioActual = new Usuario(usuarioActual.codigo, usuarioActual.clave, usuarioActual.nombre, usuarioActual.correo, usuarioActual.tipoSub, 
-            usuarioActual.fechaFin, usuarioActual.admin);
-
-            indice = listaUsuarios.findIndex((usuario) => usuario.codigo == usuarioActual.codigo);
-
-            usuarioActual.mostrarInformacion();
-
-            document.getElementById("botonAceptar").addEventListener("click",()=>{
-                aceptarCambios(listaUsuarios);
-            })
-        }
-    </script>
+    <script src="./js/Ajustes_Usuario.js"></script>
 </head>
 <body>
+    <nav>
+        <a href="Inicio.html"><img src="./imagenes/logoTV.png" class="logoTV"></a>
+        <ul>
+            <li>
+                <img src="./imagenes/perfil.png" class="perfil">
+                <p id="nombreUsuario"></p>
+                <p>
+                    <a href="Inicio.html">Inicio</a>
+                    <a href="Ajustes_Admin.html" class="oculto" id="ajustesAdmin">Ajustes Administradores</a>
+                    <a href="Soporte.html">Soporte</a>
+                    <a href="#" onclick="verSubscripción()">Subscripción</a>
+                    <a href="Inicio_sesion.html">Cerrar sesión</a>
+                </p>
+            </li>
+        </ul>
+    </nav>
     <div>
         <p>Nombre: <input type="text" id="nombre"></p>        
         <p>Correo: <input type="text" id="correo"></p>

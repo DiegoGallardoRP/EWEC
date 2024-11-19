@@ -10,7 +10,7 @@ class Usuario{
         //S/N ---> SI/NO     
     }
     //Editar usuario
-    editarUsuario(nuevoCodigo, nuevoNombre, nuevoCorreo, nuevaClave, nuevoTipoSub, nuevaFechaFin, 
+    editarUsuario(nuevoCodigo, nuevoNombre, nuevoCorreo, nuevaClave, nuevoTipoSub, nuevaFechaFin, admin,
         listaUsuarios){
         this.codigo=nuevoCodigo;
         this.nombre=nuevoNombre;
@@ -19,12 +19,13 @@ class Usuario{
         this.tipoSub=nuevoTipoSub;
         this.fechaFin=nuevaFechaFin;
 
-        //buscar el índice del usuario
+        //buscar el índice del usuario a editar
         let indice=listaUsuarios.findIndex(usuario=>usuario.codigo==this.codigo);
         if(indice!=-1){
             listaUsuarios[indice]=this;
             localStorage.setItem("listaUsuarios",JSON.stringify(listaUsuarios));
-            sessionStorage.setItem("usuarioActual",JSON.stringify(this));
+            //Solo cambiará usuario actual si estamos modificando al usuario actual, no a todos los usuarios
+                       
             return true;
         }
         return false;
