@@ -1,10 +1,13 @@
 function suscribirse() {
     let subscripcion = document.querySelector("input[name='subscripcion']:checked");
     if (subscripcion) {
+<<<<<<< HEAD
         if(!verificarTarjeta()){
             $('#errorTar').show();
             return;
         }
+=======
+>>>>>>> c5338802b498802ddff302174c61352c9c75a5db
         let indice = listaUsuarios.findIndex((usuario) => usuario.codigo == usuarioASuscribirse.codigo);
         let fechaActual = new Date()
         let mes = fechaActual.getMonth();
@@ -32,6 +35,7 @@ function suscribirse() {
         localStorage.setItem("listaUsuarios", JSON.stringify(listaUsuarios));
         location.href="Inicio_sesion.html";
     } else {
+<<<<<<< HEAD
         $('#error').show();
         document.getElementById("error").className = "visible";
     }
@@ -63,6 +67,13 @@ function cambiarSub(){
         return;
     }
 
+=======
+        document.getElementById("error").className = "visible";
+    }
+}
+function cambiarSub(){
+    let subscripcion = document.querySelector("input[name='subscripcion']:checked");
+>>>>>>> c5338802b498802ddff302174c61352c9c75a5db
     if (subscripcion) {
         let indice = listaUsuarios.findIndex((usuario) => usuario.codigo == usuarioASuscribirse.codigo);
         let fechaActualFin = new Date(`${usuarioASuscribirse.fechaFin}`)
@@ -91,6 +102,7 @@ function cambiarSub(){
         localStorage.setItem("listaUsuarios", JSON.stringify(listaUsuarios));
         location.href="Inicio_sesion.html";
     } else {
+<<<<<<< HEAD
         $("#error").show();
     }
 }
@@ -117,4 +129,22 @@ onload = () => {
     if(usuarioActual.admin!="S"){
         $('#ajustesAdmin').hide();
     }
+=======
+        document.getElementById("error").className = "visible";
+    }
+}
+onload = () => {
+    listaUsuarios = JSON.parse(localStorage.getItem("listaUsuarios"));
+    usuarioASuscribirse = JSON.parse(localStorage.getItem("usuarioASuscribirse"));
+    if(usuarioASuscribirse.tipoSub==""){
+        document.getElementById("botonSub").className="botonVisible";
+        document.getElementById("botonSub").addEventListener("click", suscribirse);
+    }else{   
+        let contenedor=document.getElementById("subscripcionActual");
+        let contenido=`Subscripcion actual: ${usuarioASuscribirse.tipoSub}`           
+        document.getElementById("botonCamSub").className="botonVisible";
+        document.getElementById("botonCamSub").addEventListener("click", cambiarSub);
+        contenedor.insertAdjacentHTML("beforeend",contenido);
+    }
+>>>>>>> c5338802b498802ddff302174c61352c9c75a5db
 }

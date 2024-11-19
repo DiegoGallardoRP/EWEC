@@ -1,6 +1,7 @@
         onload=()=>{
             listaUsuarios = JSON.parse(localStorage.getItem("listaUsuarios"));
             document.getElementById("botonEnviar").addEventListener("click",comprobarDatos);
+<<<<<<< HEAD
             $(".error").hide();
             $('.errorX').hide();
             $('.errorX').click(ocultar);
@@ -8,6 +9,9 @@
             console.log(listaUsuarios);
         }
 
+=======
+        }
+>>>>>>> c5338802b498802ddff302174c61352c9c75a5db
         function cargarUsuarios() {
             if (!listaUsuarios) {
                 listaUsuarios = [
@@ -19,7 +23,12 @@
                 localStorage.setItem("listaUsuarios", JSON.stringify(listaUsuarios));
             }
             return listaUsuarios;
+<<<<<<< HEAD
         }        
+=======
+        }
+        cargarUsuarios();
+>>>>>>> c5338802b498802ddff302174c61352c9c75a5db
 
         function comprobarDatos() {
             let nombre = document.getElementById("nombre").value;
@@ -40,6 +49,7 @@
                     location.href = "Subscripcion.html";
                 }
             } else {
+<<<<<<< HEAD
                 $(".error").show();
                 $('.errorX').first().show();
             }
@@ -47,4 +57,11 @@
         function ocultar(evento){
             $(".error").hide();
             $('.errorX').hide();
+=======
+                document.getElementById("error").className = "visible";
+            }
+        }
+        function ocultar() {
+            document.getElementById("error").className = "oculto";
+>>>>>>> c5338802b498802ddff302174c61352c9c75a5db
         }

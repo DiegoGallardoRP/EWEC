@@ -11,11 +11,19 @@ function enviarDatos() {
     let edad = fechaActual.getFullYear() - fechaNacimiento.getFullYear();
 
     if (clave1 !== clave2 || nombre == "" || clave1 == "" || correo == "") {
+<<<<<<< HEAD
         $(".error").show();
     } else if (!patronCorreo.test(correo) || correo == "") {
         $(".errorCorreo").show();
     } else if (fecha == "" || edad < 18) {
         $(".errorFecha").show();
+=======
+        document.getElementById("error").className = "visible";
+    } else if (!patronCorreo.test(correo) || correo == "") {
+        document.getElementById("errorCorreo").className = "visible";
+    } else if (fecha == "" || edad < 18) {
+        document.getElementById("errorFecha").className = "visible";
+>>>>>>> c5338802b498802ddff302174c61352c9c75a5db
     } else {
         let listaUsuarios = JSON.parse(localStorage.getItem("listaUsuarios"));
         let usuarioExistente = listaUsuarios.find((usuario) => usuario.nombre == nombre && usuario.correo == correo);
@@ -40,6 +48,7 @@ function guardarUsuario(usuario) {
     listaUsuarios.push(usuario);
     localStorage.setItem("listaUsuarios", JSON.stringify(listaUsuarios));
     localStorage.setItem("usuarioASuscribirse",JSON.stringify(usuario));
+<<<<<<< HEAD
 }
 
 onload=()=>{
@@ -63,4 +72,6 @@ onload=()=>{
     $('a').eq(2).click(()=>{
         $(".error").hide();
     })
+=======
+>>>>>>> c5338802b498802ddff302174c61352c9c75a5db
 }

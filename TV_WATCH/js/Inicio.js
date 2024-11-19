@@ -1,5 +1,6 @@
         onload=()=>{
             esAdmin = false;
+<<<<<<< HEAD
             
             //jquery divs
             $("#ajustesAdmin").hide();
@@ -7,16 +8,26 @@
             $("#botonCancelar").click(()=>{
                 $("#divMulti").hide();
             });
+=======
+            listaMultimedia=JSON.parse(localStorage.getItem("listaMultimedia"));
+>>>>>>> c5338802b498802ddff302174c61352c9c75a5db
             //Variables para el carrusel de películas
             paginaActualPorCategoria = {};
             elementosPorPagina = 4;
             //Categorias de las películas
+<<<<<<< HEAD
             listaCategoria = ["Mi lista", "Terror", "Ciencia Ficcion", "Comedia", "Accion","Animacion"];
             tipoSeleccionado = "todos";
 
             cargarMultimedia();
             mostrarUsuario();
 
+=======
+            listaCategoria = ["Mi lista", "Terror", "Ciencia Ficcion", "Comedia", "Animacion"];
+            tipoSeleccionado = "todos";
+            cargarMultimedia();
+            mostrarUsuario();
+>>>>>>> c5338802b498802ddff302174c61352c9c75a5db
             obtenerMultimediaDeUsuario(JSON.parse(sessionStorage.getItem("usuarioActual")));
             //Crear los eventos para los botones para que solo tengan un evento
             //Boton para borrar
@@ -26,14 +37,20 @@
                 if (indice !== -1) {
                     listaMultimedia.splice(indice, 1);
                     mostrarMultimediaPorCategoria(listaMultimedia);
+<<<<<<< HEAD
                     localStorage.setItem("listaMultimedia",JSON.stringify(listaMultimedia));
                     alert(`"${titulo}" ha sido eliminada.`);
                     $("#divMulti").hide();
+=======
+                    alert(`"${titulo}" ha sido eliminada.`);
+                    document.getElementById("divMulti").className = "oculto";
+>>>>>>> c5338802b498802ddff302174c61352c9c75a5db
                     document.getElementById("nombre").value = "";
                 } else {
                     alert("No se encontró ese título");
                 }
             });
+<<<<<<< HEAD
             
             //Boton para añadir
             document.getElementById("botonGuardar").addEventListener("click", () => {
@@ -48,6 +65,18 @@
                     document.getElementById("nombre").value = "";
                     document.getElementById("director").value = "";
                     document.getElementById("fotoPeli").value="";
+=======
+            //Boton para añadir
+            document.getElementById("botonGuardar").addEventListener("click", () => {
+                let tipo = document.querySelector("input[name='tipoMulti']:checked");
+                if (tipo && document.getElementById("nombre").value != "" && document.getElementById("director").value != "" && document.getElementById("trailer").value != "") {
+                    listaMultimedia.push(new Multimedia(tipo.value, document.getElementById("nombre").value, document.getElementById("director").value, categoriaGlobal, document.getElementById("trailer").value))
+                    alert('Multimedia añadido');
+                    document.getElementById("divMulti").className = "oculto";
+                    mostrarMultimediaPorCategoria(listaMultimedia);
+                    document.getElementById("nombre").value = "";
+                    document.getElementById("director").value = "";
+>>>>>>> c5338802b498802ddff302174c61352c9c75a5db
                     document.getElementById("trailer").value = "";
                 } else {
                     alert("Debe rellenar todos los datos");
@@ -59,12 +88,19 @@
             let usuario = JSON.parse(sessionStorage.getItem("usuarioActual"));
             if (usuario.admin == "S") esAdmin = true;
             document.getElementById("nombreUsuario").textContent = `Bienvenido ${usuario.nombre}`;
+<<<<<<< HEAD
             if(esAdmin){
                 $("#ajustesAdmin").show();
+=======
+            document.getElementById("perfil").addEventListener("click",()=>{location.href="Ajustes_Usuario"});
+            if(esAdmin){
+                document.getElementById("ajustesAdmin").className="visible";
+>>>>>>> c5338802b498802ddff302174c61352c9c75a5db
             }
         }
 
         function cargarMultimedia() {
+<<<<<<< HEAD
             listaMultimedia = JSON.parse(localStorage.getItem("listaMultimedia"));
             if(!listaMultimedia){
                 listaMultimedia = [];
@@ -107,6 +143,18 @@
                 localStorage.setItem("listaMultimedia",JSON.stringify(listaMultimedia));
             }
             mostrarMultimediaPorCategoria(listaMultimedia);
+=======
+            if(!listaMultimedia){
+                listaMultimedia=[];
+                listaMultimedia.push(new Multimedia("peli", "IT", "Stephen King", "Terror", "it.jpg", "https://www.youtube.com/watch?v=_oBZ_zTz0Nw"));
+                listaMultimedia.push(new Multimedia("peli", "Alien", "David Fincher", "Terror", "alien.jpg", ""));
+                listaMultimedia.push(new Multimedia("peli", "Inactividad Paranormal", "Michael Tiddes", "Comedia", "inact.jpg", ""));
+                listaMultimedia.push(new Multimedia("serie", "Cómo conocí a vuestra madre", "Carter Bays Craig Thomas", "Comedia", "madre.jpg", "https://www.youtube.com/watch?v=90OxzHzvWSg"));
+
+                localStorage.setItem("listaMultimedia",JSON.stringify(listaMultimedia));
+            }
+            
+>>>>>>> c5338802b498802ddff302174c61352c9c75a5db
         }
 
         //Funcion que muestra las pelis o series de cuatro en cuatro
@@ -149,7 +197,10 @@
             paginaActualPorCategoria = {};
             mostrarMultimediaPorCategoria(listaMultimedia);
         }
+<<<<<<< HEAD
         
+=======
+>>>>>>> c5338802b498802ddff302174c61352c9c75a5db
         //Funciones para moverse de página:
         function mostrarPaginaAnterior(categoria) {
             if (paginaActualPorCategoria[categoria] > 0) {
@@ -215,18 +266,35 @@
         //Añadir multimedia
         function anadirMultimedia(categoria) {
             categoriaGlobal=categoria;
+<<<<<<< HEAD
             $("#divMulti").show();
             $("#botonGuardar").show();
             $("#datosGuardar").show();
             $("#botonBorrar").hide();
+=======
+            document.getElementById("divMulti").className = "oculto";
+            document.getElementById("divMulti").className = "visible";
+            document.getElementById("botonGuardar").className = "visible";
+            document.getElementById("datosGuardar").className = "visible";
+            document.getElementById("botonBorrar").className = "oculto";            
+            document.getElementById("botonCancelar").addEventListener("click", () => { document.getElementById("divMulti").className = "oculto"; });
+>>>>>>> c5338802b498802ddff302174c61352c9c75a5db
         }
         //Borrar multimedia
         function borrarMultimedia(categoria) {
             categoriaGlobal=categoria;
+<<<<<<< HEAD
             $("#divMulti").show();
             $("#botonGuardar").hide();
             $("#datosGuardar").hide();
             $("#botonBorrar").show();            
+=======
+            document.getElementById("divMulti").className = "visible";
+            document.getElementById("botonBorrar").className = "visible";
+            document.getElementById("datosGuardar").className = "oculto";
+            document.getElementById("botonGuardar").className = "oculto";
+            document.getElementById("botonCancelar").addEventListener("click", () => { document.getElementById("divMulti").className = "oculto"; });
+>>>>>>> c5338802b498802ddff302174c61352c9c75a5db
         }
 
         //Funcion detalle multimedia

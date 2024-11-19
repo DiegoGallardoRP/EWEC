@@ -25,7 +25,13 @@ class Usuario{
             listaUsuarios[indice]=this;
             localStorage.setItem("listaUsuarios",JSON.stringify(listaUsuarios));
             //Solo cambiará usuario actual si estamos modificando al usuario actual, no a todos los usuarios
+<<<<<<< HEAD
                        
+=======
+            if(admin=="N"){
+                sessionStorage.setItem("usuarioActual",JSON.stringify(this));
+            }            
+>>>>>>> c5338802b498802ddff302174c61352c9c75a5db
             return true;
         }
         return false;
