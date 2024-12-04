@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documento</title>
+    <script src="usuario.js"></script>
+    <script src="jquery.min.js"></script>
+    <style>
+        /* Puedes añadir estilos aquí si lo deseas */
+    </style>
+    <script>
+        $(document).ready(function () {
+            let nuevoUsuario=new Usuario("hola", 18);
+            alert(JSON.stringify(nuevoUsuario));
+            let contador = 0;
+            let intervalo = setInterval(() => {
+                if (!localStorage.getItem("contador")) {
+                    localStorage.setItem("contador", "0");
+                } else {
+                    localStorage.setItem("contador", parseInt(localStorage.getItem("contador")) + 1);
+                    contador++
+                }
+                if (contador == 10) {
+                    clearInterval(intervalo);
+                    localStorage.clear();
+                }
+            }, 1000);
+
+            setTimeout(()=>{
+                alert("pene");
+            }, 3000)
+        });
+    </script>
+</head>
+
+<body>
+</body>
+
+</html>

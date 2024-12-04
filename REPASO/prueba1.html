@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="jquery.min.js"></script>
+    
+    <script>
+        $(document).ready(function(){
+            let $ul=$('<ul></ul>').prependTo(document.body);
+            let $button=$('<button type="button">Terminar de pintar lista</button>').appendTo(document.body).click(detenerIntervalo);
+            i=1;
+            intervaloID=setInterval(anadirLi,1000);
+        })
+        function anadirLi() {
+            let $li=$(`<li id="${i}"></li>`).appendTo('ul').text(i);
+            i++;
+        }
+        function detenerIntervalo(){
+            clearInterval(intervaloID);
+        }
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

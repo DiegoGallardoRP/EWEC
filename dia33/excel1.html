@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table,
+        tr,
+        td {
+            border: 2px solid red;
+        }
+
+        td {
+            width: 50px;
+            height: 50px;
+        }
+    </style>
+    <script>
+        onload = () => {
+            crearBoton('Añadir fila', anadirFila);
+            crearBoton('Añadir columna', anadirColumna);
+            crearBoton('Pintar filas y columnas', pintar);
+            crearBoton('Rellenar con número filas y columnas', rellenar);
+            crearBoton('Sumar números', sumar);
+            recuperarDatos();
+        }
+        function crearBoton(texto, funcion) {
+            let boton = document.createElement('button');
+            document.getElementById('menu').appendChild(boton);
+            boton.textContent = texto;
+
+            boton.addEventListener('click', funcion);
+        }
+        function anadirFila() {
+            let tabla = document.getElementsByTagName('table')[0];
+            let nuevaFila = tabla.getElementsByTagName('tr')[0].cloneNode(true);
+            tabla.appendChild(nuevaFila);
+
+            registrarActividad("anadirFila","Añade una fila a la tabla");
+        }
+        function anadirColumna() {
+            let listaTrs = [...document.getElementsByTagName('tr')];
+            listaTrs.forEach(tr => {
+                let td = document.createElement('td');
+                tr.appendChild(td);
+            });
+
+            registrarActividad("anadirColumna","Añade una columna a la tabla");
+        }
+        function pintar() {
+            let filaInicial = document.getElementById('filaInicial').value.trim();
+            let colInicial = document.getElementById('columnaInicial').value.trim();
+            let filaFinal = document.getElementById('filaFinal').value.trim();
+            let colFinal = document.getElementById('columnaFinal').value.trim();
+
+            let listaFilas = [...document.getElementsByTagName('tr')];
+
+            //Validación
+            if (isNaN(filaInicial) || parseInt(filaInicial) < 0 || parseInt(filaInicial) >= listaFilas.length) {
+                alert('El número de fila inicial no es correcto');
+                return false;
+            }
+            if (isNaN(filaFinal) || parseInt(filaFinal) < 0 || parseInt(filaInicial) > parseInt(filaFinal) || parseInt(filaInicial) >= listaFilas.length) {
+                alert('El número de fila final no es correcto');
+                return false;
+            }
+
+            for (let j = filaInicial - 1; j <= filaFinal; j++) {
+                for (let i = colInicial - 1; i <= colFinal - 1; i++) {
+                    listaFilas[j].getElementsByTagName('td')[i].style.backgroundColor = 'green';
+                }
+            }
+
+            //Guardar info en sessionStorage
+            registrarActividad("pintar",`Colorear de verde las celdas de la fila: ${filaInicial} columna: ${colInicial} hasta la fila: ${filaFinal} columna: ${colFinal}`);
+        }
+        function rellenar() {
+            let filaInicial = document.getElementById('filaInicial').value.trim();
+            let colInicial = document.getElementById('columnaInicial').value.trim();
+            let filaFinal = document.getElementById('filaFinal').value.trim();
+            let colFinal = document.getElementById('columnaFinal').value.trim();
+
+            let num = document.getElementById('numero').value.trim();
+            let listaFilas = [...document.getElementsByTagName('tr')];
+
+            for (let i = filaInicial; i <= filaFinal; i++) {
+                for (let j = colInicial; j <= colFinal; j++) {
+                    listaFilas[i].getElementsByTagName('td')[j].textContent = num;
+                }
+            }
+
+            //Guardar info en sessionStorage
+            registrarActividad("pintar",`Rellena con el número ${num} las celdas de la fila: ${filaInicial} columna: ${colInicial} hasta la fila: ${filaFinal} columna: ${colFinal}`);
+        }
+        function sumar() {
+            let filaInicial = document.getElementById('filaInicial').value.trim();
+            let colInicial = document.getElementById('columnaInicial').value.trim();
+            let filaFinal = document.getElementById('filaFinal').value.trim();
+            let colFinal = document.getElementById('columnaFinal').value.trim();
+
+            let num = 0;
+            let listaFilas = [...document.getElementsByTagName('tr')];
+
+            for (let i = filaInicial; i <= filaFinal; i++) {
+                for (let j = colInicial; j <= colFinal; j++) {
+                    if (!isNaN(listaFilas[i].getElementsByTagName('td')[j].textContent)) {
+                        num += parseInt(listaFilas[i].getElementsByTagName('td')[j].textContent);
+                    }
+                }
+            }hoy.getFullYear()*10000+(hoy.getMonth()+1)*100+hoy.getDate()
+            alert(num);
+        }
+        function registrarActividad(boton,operacion){
+            let lista=[];
+            if(sessionStorage.getItem('log')){
+                lista=JSON.parse(sessionStorage.getItem('log'));
+            }
+            let hoy=new Date();
+            //Se convierte la fecha a un solo número para poder compararlo
+            let fecha=hoy.getFullYear()*10000+(hoy.getMonth()+1)*100+hoy.getDate();
+            let horas=hoy.getHours()+':'+hoy.getMinutes();
+            lista.push({
+                "fecha":fecha,
+                "hora":horas,
+                "boton":boton,
+                "operacion":operacion
+            });
+            sessionStorage.setItem('log',JSON.stringify(lista));
+        }
+    </script>
+</head>
+
+<body>
+    <div id="menu">
+        <p>
+            Fila <input type='text' id='filaInicial'>
+            Columna <input type='text' id='columnaInicial'>
+            <br>
+            Fila <input type='text' id='filaFinal'>
+            Columna <input type='text' id='columnaFinal'>
+            <br>
+            Número <input type="text" id="numero">
+        </p>
+    </div>
+    <table>
+        <tr>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+</body>
+
+</html>

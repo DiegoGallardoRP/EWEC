@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../DIA23/jquery.js"></script>
+    <script>
+        $(document).ready(()=>{
+            pedirCoches();
+            $("button").click(anadirCoche);
+        });
+        function anadirCoche(){
+            $.post("addCoche.php",{
+                "matricula": $("#matricula").val(),
+                "marca": $("#marca").val(),
+                "modelo": $("#modelo").val(),
+                "cilindrada": $("#cilindrada").val(),
+                "fecha": $("#fecha").val(),
+                "foto": $("#foto").val(),
+            },procesarRespuesta,"json");
+        }
+        function procesarRespuesta(respuesta){
+            if (respuesta.estado == "ok"){
+                alert("Operación realizada con exito");
+                pedirCoches();
+            } else {
+                alert(respuesta.mensaje)
+            }
+        }
+        var listaCoches=[];
+        function pedirCoches(){
+            $.getJSON("consultaCoches.php",{},(lista)=>{
+                listaCoches =lista;
+                pintarCoches(lista);
+            });
+        }
+        function pintarCoches(lista){
+            let tbody=document.querySelector("table tbody");
+            lista.forEach(coche => {
+                contenido =`<tr>
+                    <td>${coche.marca}</td>
+                    <td>${coche.modelo}</td>
+                    <td>${coche.cilindrada}</td>
+                    <td>${coche.fecha}</td>
+                    <td><img src="./imagenes/${coche.foto}"></td>
+                    <td><img width="50px" src="./imagenes/papelera.png" 
+                         onclick="eliminar('${coche.matricula}')">
+                         <img width="50px" src="./imagenes/editar.png" 
+                         onclick="editar('${coche.matricula}')">
+                    </td>         
+                    </tr>`
+                tbody.innerHTML +=contenido; 
+            });
+        }
+        function eliminar(matricula){
+            $.post("delCoche.php",{
+                "matricula": matricula
+            },procesarRespuesta,"json");
+        }
+        function editar(matricula){
+            var posicion=listaCoches.findIndex(coche=>coche.matricula==matricula);
+            if (posicion>=0){
+                $("#matricula").val(matricula).attr("disabled","true");
+                $("#marca").val(listaCoches[posicion].marca);
+                $("#modelo").val(listaCoches[posicion].modelo);
+                $("#fecha").val(listaCoches[posicion].fecha);
+                $("#cilindrada").val(listaCoches[posicion].cilindrada);
+                $("#foto").val(listaCoches[posicion].foto);
+                $("#nuevoCoche button:eq(0)").off("click",anadirCoche)
+                                             .on("click",{"matricula":matricula},editarCoche)
+                                             .text("GUARDAR CAMBIOS");
+            }
+        }
+        function editarCoche(evento){
+            $.post("editarCoche.php",{
+                "matricula": evento.data.matricula,
+                "marca": $("#marca").val(),
+                "modelo": $("#modelo").val(),
+                "cilindrada": $("#cilindrada").val(),
+                "fecha": $("#fecha").val(),
+                "foto": $("#foto").val(),
+            },procesarRespuesta,"json");
+            $("#nuevoCoche button:eq(0)").on("click",anadirCoche)
+                                         .off("click",editarCoche)
+                                         .text("AÑADIR COCHE");
+        }
+    </script>
+    <style>
+        #nuevoCoche{
+            border: 2px solid red;
+            background-color: grey;
+            width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div id="nuevoCoche">
+        <p>MATRICULA<input type="text" id="matricula"></p>
+        <p>MARCA<input type="text" id="marca"></p>
+        <p>MODELO<input type="text" id="modelo"></p>
+        <p>CILINDRADA<input type="text" id="cilindrada"></p>
+        <p>FECHA<input type="text" id="fecha"></p>
+        <p>FOTO<input type="text" id="foto"></p>
+        <button type="button">AÑADIR COCHE</button>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>MARCA</th>
+                <th>MODELO</th>
+                <th>CILINDRADA</th>
+                <th>FECHA</th>
+                <th>FOTO</th>
+                <th>ACCIONES</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</body>
+</html>

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Peticiones de Ayuda</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        .request-list {
+            margin-top: 20px;
+            list-style: none;
+            padding: 0;
+        }
+
+        .request-item {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .request-item h3 {
+            margin: 0;
+            font-size: 18px;
+            color: #007bff;
+        }
+
+        .request-item p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .request-item .date {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .btn-back {
+            display: inline-block;
+            margin-top: 20px;
+            text-align: center;
+            width: 100%;
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .btn-back:hover {
+            background-color: #0056b3;
+        }
+
+        #detalle,
+        .ocultos {
+            display: none;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 5px;
+            text-align: center;
+        }
+
+        td img {
+            width: 50px;
+            height: 50px;
+            display: block;
+            margin: 0 auto 5px auto;
+        }
+
+        th {
+            background-color: #007bff;
+            color: #fff;
+            font-size: 16px;
+        }
+    </style>
+    <script src="jquery.js"></script>
+    <script src="articulos.js"></script>
+    <script src="solucion2.js"></script>
+    <script>
+        
+        $(document).ready(()=>{
+            //apartado 2
+            $('#animacion table:eq(2) img').on('click',animar);
+            //apartado1
+            $('#detalle p:eq(1)').click(mostrarPeticionesOrdenadas);
+        })
+
+        function mostrarPeticionesOrdenadas(){
+            let listaPeticiones=[];
+            let articulo=$("#articulo").val();
+            if(sessionStorage.getItem("peticiones")){
+                listaPeticiones=JSON.parse(sessionStorage.getItem("peticiones"));
+            }
+            let listaFiltrada=listaPeticiones.filter(peticion=>peticion.codigo_articulo==articulo);
+            listaFiltrada.sort((a,b)=>{
+                if (a.fecha_entrega>b.fecha_entrega) return 1
+                else return -1
+            })
+            $(listaFiltrada).each((indice,elemento)=>{
+                $(`<p>${elemento.codigo_articulo}</p>`).appendTo("#detalle");
+            })
+        }
+        
+        function animar(){
+            $(this).animate({"width":"100","height":"100"},2000,()=>{
+            $(this).css({"width":"50","height":"50"}).hide().remove();
+        })
+    }
+    </script>
+</head>
+
+<body>
+    <div id="animacion">
+        <p>
+            Número de imágenes a eliminar<input type="text">
+            <button type="button">Animar</button>
+        </p>
+        <table></table>
+        <table></table>
+        <table>
+            <tr>
+                <th colspan="5">Códigos de Artículos</th>
+            </tr>
+            <tr>
+                <td><img src="./imagenes/vacia.png" alt="Imagen vacía"><br>A001</td>
+                <td><img src="./imagenes/vacia.png" alt="Imagen vacía"><br>A002</td>
+                <td><img src="./imagenes/vacia.png" alt="Imagen vacía"><br>A003</td>
+                <td><img src="./imagenes/vacia.png" alt="Imagen vacía"><br>A006</td>
+                <td><img src="./imagenes/vacia.png" alt="Imagen vacía"><br>A007</td>
+            </tr>
+            <tr>
+                <td><img src="./imagenes/vacia.png" alt="Imagen vacía"><br>A004</td>
+                <td><img src="./imagenes/vacia.png" alt="Imagen vacía"><br>A005</td>
+                <td><img src="./imagenes/vacia.png" alt="Imagen vacía"><br>A008</td>
+                <td><img src="./imagenes/vacia.png" alt="Imagen vacía"><br>A009</td>
+                <td><img src="./imagenes/vacia.png" alt="Imagen vacía"><br>A010</td>
+            </tr>
+            <tr>
+                <td><img src="./imagenes/vacia.png" alt="Imagen vacía"><br>A013</td>
+                <td><img src="./imagenes/vacia.png" alt="Imagen vacía"><br>A012</td>
+                <td><img src="./imagenes/vacia.png" alt="Imagen vacía"><br>A011</td>
+                <td><img src="./imagenes/vacia.png" alt="Imagen vacía"><br>A014</td>
+                <td><img src="./imagenes/vacia.png" alt="Imagen vacía"><br>A015</td>
+            </tr>
+            <tr>
+                <td><img src="./imagenes/vacia.png" alt="Imagen vacía"><br>A016</td>
+                <td><img src="./imagenes/vacia.png" alt="Imagen vacía"><br>A017</td>
+                <td><img src="./imagenes/vacia.png" alt="Imagen vacía"><br>A018</td>
+                <td><img src="./imagenes/vacia.png" alt="Imagen vacía"><br>A019</td>
+                <td><img src="./imagenes/vacia.png" alt="Imagen vacía"><br>A020</td>
+            </tr>
+            <tr>
+                <td><img src="./imagenes/vacia.png" alt="Imagen vacía"><br>A021</td>
+                <td><img src="./imagenes/vacia.png" alt="Imagen vacía"><br>A022</td>
+                <td><img src="./imagenes/vacia.png" alt="Imagen vacía"><br>A023</td>
+                <td><img src="./imagenes/vacia.png" alt="Imagen vacía"><br>A024</td>
+                <td><img src="./imagenes/vacia.png" alt="Imagen vacía"><br>A025</td>
+            </tr>
+            <tr>
+                <td><img src="./imagenes/vacia.png" alt="Imagen vacía"><br>A026</td>
+                <td><img src="./imagenes/vacia.png" alt="Imagen vacía"><br>A027</td>
+                <td><img src="./imagenes/vacia.png" alt="Imagen vacía"><br>A028</td>
+                <td><img src="./imagenes/vacia.png" alt="Imagen vacía"><br>A029</td>
+                <td><img src="./imagenes/vacia.png" alt="Imagen vacía"><br>A030</td>
+            </tr>
+        </table>
+    </div>
+    <div class="container">
+        <h2>Listado de Peticiones de Ayuda</h2>
+        <!-- Selección de Artículo -->
+        <div class="form-group">
+            <label for="origen">Seleccione un origen</label>
+            <select id="origen" name="origen">
+                <option value="-1">Seleccione un origen</option>
+                <option>donación</option>
+                <option>gobierno</option>
+                <option>empresa</option>
+                <option>particular</option>
+            </select>
+            <br><br>
+            <label for="articulo">Seleccione un articulo</label>
+            <select id="articulo" name="articulo">
+                <option value="-1">Seleccione un articulo</option>
+            </select>
+            <div id="peticiones">
+            </div>
+            <div id="detalle">
+                <p class="oculto">NO VALE</p>
+                <p>Ver detalle</p>
+                <p class="oculto">NO VALE</p>
+                <p class="oculto">NO VALE</p>
+            </div>
+        </div>
+        <br><br>
+        <a href="index.html" class="btn-back">Volver al formulario</a>
+    </div>
+
+
+</body>
+
+</html>

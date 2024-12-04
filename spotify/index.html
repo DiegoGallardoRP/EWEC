@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        img{
+            height: 50px;
+            width: 50px;
+        }
+    </style>
+    <script src="../dia26/jquery.min.js"></script>
+    <script>
+        var listaDiscos=[];
+        $.getJSON('ej1.php',{},(resultado)=>{
+            listaDiscos=resultado;
+            pintarDiscosEnTabla(listaDiscos);
+        })
+        function pintarDiscosEnTabla(lista){
+            console.log(lista);
+            let i=0;
+            lista.forEach(disco=>{
+                $('tbody').append('<tr></tr>');
+                $(`tr:eq(${i})`).append(`
+                <td>${disco.nombre}</td>
+                <td>${disco.precio}</td>
+                <td>${disco.foto}</td>
+                <td><img src="corazon.png" onclick="anadirAMiLista('${disco.id_disco}')"></td>
+                <td><img src="dorito.png" id='${disco.id_disco}' onclick="iniciarCancion('${disco.id_disco}')"></td>`);
+                i++;
+            })
+        }
+        function anadirAMiLista(id){
+            let miLista=[];
+            if(localStorage.getItem('miLista')){
+                miLista=JSON.parse(localStorage.getItem('miLista'));
+            }
+            let posicionDisco=listaDiscos.findIndex(disco=>disco.id_disco==id);
+            let posicionMiLista=miLista.findIndex(disco=>disco.id_disco==id);
+            if(posicionMiLista==-1){
+                miLista.push(listaDiscos[posicionDisco]);
+            }else{
+                miLista.splice(posicionMiLista, 1);
+            }
+            localStorage.setItem('miLista', JSON.stringify(miLista));
+        }
+        function iniciarCancion(id){
+            $(`#${id}`).after('<audio controls><source src="horse.ogg" type="audio/ogg"><source src="horse.mp3" type="audio/mpeg">Your browser does not support the audio element.</audio>');
+        }
+        function buscar(){
+            
+        }
+    </script>
+</head>
+<body>
+    <p><input type="text" id="buscador"><button type="button" onclick="buscar()">Buscar</button></p>
+    <table>
+        <tbody>
+
+        </tbody>
+    </table>
+</body>
+</html>
