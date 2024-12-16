@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div{
+            background-color: grey;
+        }
+    </style>
+    <script>
+        onload=()=>{
+            document.getElementById('btnNuevo').addEventListener('click',mostrarDivNuevo);
+            document.getElementById('btnVer').addEventListener('click',mostrarCoches);
+        }
+        function mostrarDivNuevo(){
+            let div=`<div>
+                    <p>matricula <input type="text" id="matricula" name="matricula"></p>
+                    <p>marca <input type="text" id="marca" name="marca"></p>
+                    <p>modelo <input type="text" id="modelo" name="modelo"></p>
+                    <p>color <input type="text" id="color" name="color"></p>
+                    <p>kilometros <input type="number" id="kilometros" name="kilometros"></p>
+                    <p>precio <input type="number" id="precio" name="precio"></p>
+                    <p>foto <input type="text" id="foto" name="foto"></p>
+                    <p>id cliente <input type="text" id="id_cliente" name="id_cliente"></p>
+                    <p>
+                        <button type="button" id="aceptar">Enviar</button>
+                        <input type="reset" onclick="cancelar()" value="Cancelar">
+                    </p>                    
+                </div>`;
+            document.body.insertAdjacentHTML("afterbegin",div);
+            document.getElementById('aceptar').addEventListener('click', grabarCoche);
+        }
+        function cancelar(){
+            document.getElementById('formNuevo').remove();
+        }
+        function grabarCoche(){
+            let matricula=document.getElementById('matricula').value.trim();
+            let marca=document.getElementById('marca').value.trim();
+            let modelo=document.getElementById('modelo').value.trim();
+            let color=document.getElementById('color').value.trim();
+            let kilometros=document.getElementById('kilometros').value.trim();
+            let precio=document.getElementById('precio').value.trim();
+            let foto=document.getElementById('foto').value.trim();
+            let id_cliente=document.getElementById('id_cliente').value.trim();
+
+            let datosCoche={
+                "matricula":matricula,
+                "marca":marca,
+                "modelo":modelo,
+                "color":color,
+                "kilometros":kilometros,
+                "precio":precio,
+                "foto":foto,
+                "id_cliente":id_cliente
+            }
+
+            fetch('addCoche.php',{
+                "method":"POST",
+                "body": JSON.stringify(datosCoche),
+                headers:{
+                    'Content-Type':'application/json'
+                }
+            }).then(datos=>datos.json())
+            .catch(error=>console.log(error))
+            .then(datos=>alert(datos.estado))
+        }
+        function mostrarCoches(){
+            fetch('consultaCoches.php',{
+                "method":"GET",
+                headers:{
+                    'Content-Type':'application/json'
+                }
+            }).then(res=>res.json())
+            .catch(error=>console.log(error))
+            .then(res=>pintarCoches(res))
+        }
+        function pintarCoches(lista){
+            console.log(lista);
+        }
+    </script>
+</head>
+<body>
+    <button type="button" id="btnNuevo">Dar de alta coche</button>
+    <button type="button" id="btnVer">Ver coches</button>
+    <button type="button" id="btnEliminar">Eliminar coche</button>
+</body>
+</html>

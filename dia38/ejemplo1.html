@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        function exito(resultado) {
+            console.log("10 segundos");
+        }
+        function fallo(error) {
+            console.log("Error al ejecutarse el timer " + error);
+        }
+        const espera = (ms => new Promise(resuelve => setTimeout(resuelve, ms)));
+        espera(10000).then(() => exito("10 segundos")).catch(() => fallo("error"));
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

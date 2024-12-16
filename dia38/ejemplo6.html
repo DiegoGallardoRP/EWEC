@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        function consultar() {
+            var url = 'consultaCliente.php';
+            var data = { nombre: 'Juan' };
+            fetch(url, {
+                method: 'GET',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(res => res.text())
+                .catch(error => console.error('Error:', error))
+                .then(response => document.getElementById('contenido').innerHTML = response);
+        }
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

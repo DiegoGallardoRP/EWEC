@@ -1,0 +1,21 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head>   
+<meta charset="UTF-8">   
+<meta name="viewport" content="width=device-width, initial-scale=1.0">   
+<meta http-equiv="X-UA-Compatible" content="ie=edge">   
+<title>Fetch</title> 
+</head> 
+<body>   
+<button id="btn">Hacer una conexión con Ajax</button>   
+<script>   
+document.addEventListener('DOMContentLoaded', configureAjaxCalls);   
+function configureAjaxCalls() {     
+   document.getElementById('btn').addEventListener('click', function() {         
+        fetch('test.txt').then(response => response.text()).catch(response => console.log('muestro error', response))           
+                         .then(res =>console.log('muestro respuesta: ', res) );      
+   });   
+}   
+</script> 
+</body> 
+</html>

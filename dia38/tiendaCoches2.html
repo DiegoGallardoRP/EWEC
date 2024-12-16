@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../DIA23/jquery.js"></script>
+    <script>
+        $(document).ready(()=>{
+            pedirCoches();
+            $("button").click(anadirCoche);
+        });
+        async function anadirCoche(){
+            try{
+                let datos = {
+                "matricula": $("#matricula").val(),
+                "marca": $("#marca").val(),
+                "modelo": $("#modelo").val(),
+                "cilindrada": $("#cilindrada").val(),
+                "fecha": $("#fecha").val(),
+                "foto": $("#foto").val(),
+                }
+
+                let respuesta = await fetch("addCoche.php",{
+                    method: "POST",
+                    body: JSON.stringify(datos),
+                    headers:{
+                        'Content-Type': 'application/json'
+                    }
+                });
+                respuesta= await respuesta.json();
+
+                if (respuesta.estado == "ok"){
+                    alert("Operación realizada con exito");
+                    pedirCoches();
+                } else {
+                    alert(respuesta.mensaje)
+                }
+            } catch (err){
+                alert("No se ha podido realizar la petición")
+            }
+        }
+        var listaCoches=[];
+        async function pedirCoches(){
+            try{
+                let respuesta = await fetch("consultaCoches.php");
+                listaCoches = await respuesta.json();
+                pintarCoches(listaCoches);
+            } catch (error){
+                alert("No se ha podido realizar la petición")
+            }
+        }
+        function pintarCoches(lista){
+            let tbody=document.querySelector("table tbody");
+            tbody.innerHTML ="";
+            lista.forEach(coche => {
+                contenido =`<tr>
+                    <td>${coche.marca}</td>
+                    <td>${coche.modelo}</td>
+                    <td>${coche.cilindrada}</td>
+                    <td>${coche.fecha}</td>
+                    <td><img src="./imagenes/${coche.foto}"></td>
+                    <td><img width="50px" src="./imagenes/papelera.png" 
+                         onclick="eliminar('${coche.matricula}')">
+                         <img width="50px" src="./imagenes/editar.png" 
+                         onclick="editar('${coche.matricula}')">
+                    </td>         
+                    </tr>`
+                tbody.innerHTML +=contenido; 
+            });
+        }
+        async function eliminar(matricula){
+            try{
+                let respuesta = await fetch("delCoche.php",{
+                    method: "POST",
+                    body: JSON.stringify({"matricula": matricula}),
+                    headers: { 'Content-Type': 'application/json'}
+                    //headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
+                })
+                respuesta= await respuesta.json();
+
+                if (respuesta.estado == "ok"){
+                    alert("Operación realizada con exito");
+                    pedirCoches();
+                } else {
+                    alert(respuesta.mensaje)
+                }
+            } catch (error){
+                alert("No se ha podido realizar la petición")
+            }
+        }
+        function editar(matricula){
+            var posicion=listaCoches.findIndex(coche=>coche.matricula==matricula);
+            if (posicion>=0){
+                $("#matricula").val(matricula).attr("disabled","true");
+                $("#marca").val(listaCoches[posicion].marca);
+                $("#modelo").val(listaCoches[posicion].modelo);
+                $("#fecha").val(listaCoches[posicion].fecha);
+                $("#cilindrada").val(listaCoches[posicion].cilindrada);
+                $("#foto").val(listaCoches[posicion].foto);
+                $("#nuevoCoche button:eq(0)").off("click",anadirCoche)
+                                             .on("click",{"matricula":matricula},editarCoche)
+                                             .text("GUARDAR CAMBIOS");
+            }
+        }
+        async function editarCoche(evento){
+            try{
+                let datos = {
+                "matricula": evento.data.matricula,
+                "marca": $("#marca").val(),
+                "modelo": $("#modelo").val(),
+                "cilindrada": $("#cilindrada").val(),
+                "fecha": $("#fecha").val(),
+                "foto": $("#foto").val(),
+                }
+                let respuesta = await fetch("editarCoche.php",{
+                    method: "POST",
+                    body: JSON.stringify(datos),
+                    headers: { "Content-Type":"application/json"}
+                })
+                respuesta = await respuesta.json();
+                if (respuesta.estado == "ok"){
+                    alert("Operación realizada con exito");
+                    $("#nuevoCoche button:eq(0)").on("click",anadirCoche)
+                                         .off("click",editarCoche)
+                                         .text("AÑADIR COCHE");
+                    pedirCoches();
+                } else {
+                    alert(respuesta.mensaje)
+                }
+            } catch (error){
+                alert("No se ha podido realizar")
+            }
+        }
+    </script>
+    <style>
+        #nuevoCoche{
+            border: 2px solid red;
+            background-color: grey;
+            width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div id="nuevoCoche">
+        <p>MATRICULA<input type="text" id="matricula"></p>
+        <p>MARCA<input type="text" id="marca"></p>
+        <p>MODELO<input type="text" id="modelo"></p>
+        <p>CILINDRADA<input type="text" id="cilindrada"></p>
+        <p>FECHA<input type="text" id="fecha"></p>
+        <p>FOTO<input type="text" id="foto"></p>
+        <button type="button">AÑADIR COCHE</button>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>MARCA</th>
+                <th>MODELO</th>
+                <th>CILINDRADA</th>
+                <th>FECHA</th>
+                <th>FOTO</th>
+                <th>ACCIONES</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</body>
+</html>
