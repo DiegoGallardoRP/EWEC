@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="jquery.js"></script>
+    <script>
+        onload=()=>{
+            document.getElementsByTagName('button')[0].addEventListener('click',enviarDatos);
+        }
+        function enviarDatos(){
+            let usuario=document.getElementById('nombre').value.trim();
+            let clave=document.getElementById('clave').value.trim();
+            $.post('login.php',{
+                "usuario":usuario,
+                "clave":clave
+            },(respuesta)=>{
+                respuesta=JSON.parse(respuesta);
+                if(respuesta.estado=="OK"){
+                     location.href="main.html";
+                }else{
+                    alert("Usuario/clave erroneo");
+                }
+            })
+
+            /* fetch('login.php',{
+                 "method":"POST",
+                 "body":JSON.stringify({
+                     "usuario":usuario,
+                     "clave":clave
+                 }),
+                 "header":{
+                     'Content-Type':''
+                 }
+             }).then(res=>res.json())
+             .catch(error=>alert("NO SE HA PODIDO CONECTAR"))
+             .then(respuesta=>{
+                 if(respuesta.estado=="OK"){
+                     location.href="main.html";
+                 }else{
+                    alert("Usuario/clave erroneo");
+                }
+             })*/
+        }
+    </script>
+</head>
+<body>
+    <p>Nombre: <input type="text" id="nombre"></p>
+    <p>Clave: <input type="text" id="clave"></p>
+    <button type="button">Enviar</button>
+</body>
+</html>

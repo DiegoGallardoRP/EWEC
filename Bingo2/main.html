@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    table,th,td{
+        border: 2px solid black;
+    }
+</style>
+<script src="jquery.js"></script>
+<script src="main.js"></script>
+<body>
+    <mi-menu>
+
+    </mi-menu>
+    <div id="partidaActual">
+        <table>
+            <tbody>
+                <tr>
+                    <th>PARTIDA ACTUAL</th>
+                    <th>
+                        PREMIO:<span id="premio"></span><br/>
+                        NUMERO:<span id="numero"></span>
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                        <table id="tablaNumerosActuales">
+                        </table>
+                    </th>
+                    <th>
+                        <table id="tablaCarton">
+                        </table>
+                    </th>
+                </tr>
+                
+            </tbody>
+        </table>
+    </div>
+    <div id="divPartidasFuturas">
+        <table id="tablaPartidasFuturas">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Num Cartones</th>
+                    <th>Premio</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
