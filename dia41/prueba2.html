@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="mimodulo.js" type="module"></script>
+    <script>
+        onload=()=>{
+            document.getElementsByTagName('button')[0].addEventListener('click',cambiarFilas);
+        }
+        function cambiarFilas(){
+            let numFilas = document.getElementsByTagName('mi-tabla')[0].getAttribute("numfilas");
+            numFilas = parseInt(numFilas)+1;
+            document.getElementsByTagName('mi-tabla')[0].setAttribute("numfilas",numFilas);
+            console.log(document.getElementsByTagName('table'));
+        }
+    </script>
+</head>
+<body>
+    <mi-tabla numfilas="5" numcolumnas="5"></mi-tabla>
+    <button id="AmpliarFilas">Cambiar Filas</button>
+    
+</body>
+</html>
