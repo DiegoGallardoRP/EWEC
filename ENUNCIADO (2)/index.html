@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Solicitud de Ayuda</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .form-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .form-container h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .form-group select,
+        .form-group input[type="number"],
+        .form-group input[type="date"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        .form-group input[type="number"] {
+            -moz-appearance: textfield;
+        }
+
+        .form-group input[type="number"]::-webkit-outer-spin-button,
+        .form-group input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            color: #ffffff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-submit:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <script src="articulos.js"></script>
+    <script src="solucion1.js"></script>
+</head>
+
+<body>
+
+    <div class="form-container">
+        <h2>Solicitud de Ayuda</h2>
+        <form id="formAyuda">
+            <!-- Campo de Fecha de Entrega -->
+            <div class="form-group">
+                <label for="solicitante">Solicitante</label>
+                <input type="text" id="solicitante" name="solicitante">
+            </div>
+            <!-- Campo de Fecha de Entrega -->
+            <div class="form-group">
+                <label for="fechaEntrega">Fecha de Entrega</label>
+                <input type="text" id="fechaEntrega" name="fechaEntrega">
+            </div>
+
+            <!-- Selección de Artículo -->
+            <div class="form-group">
+                <label for="articulo">Seleccione el Artículo</label>
+                <select id="articulo" name="articulo">
+                    <option value="-1">Seleccione un artículo</option>
+                    <!-- Agrega aquí el resto de los artículos -->
+                </select>
+            </div>
+
+            <!-- campo tipo -->
+            <div class="form-group">
+                <label for="tipo">Tipo</label>
+                <input type="text" id="tipo" name="tipo">
+            </div>
+
+            <!-- Cantidad Solicitada -->
+            <div class="form-group">
+                <label for="cantidad">Cantidad Solicitada</label>
+                <input type="text" id="cantidad" name="cantidad" min="1">
+            </div>
+
+            <!-- Botón de Solicitud -->
+            <button type="submit" class="btn-submit">Solicitar Ayuda</button>
+        </form>
+    </div>
+
+</body>
+
+</html>

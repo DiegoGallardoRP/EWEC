@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="jquery.min.js"></script>
+    <script>
+        onload=()=>{
+            document.getElementById('boton1').addEventListener('click',pedirDatosAlServidor)
+        }
+        //Funcion asíncrona
+        function pedirDatosAlServidor(){
+            $.getJSON('consultarNotas.php',{'codigo':'aaaa'},(datos)=>pintarResultado(datos.mensaje));
+        }
+        //Recibe como parámetro lo que le devuelve el servidor
+        function pintarResultado(datos){
+            document.getElementById('caja1').value=datos;
+        }
+        function pintarError(){
+            alert('ERROR DE CONEXION');
+        }
+    </script>
+</head>
+<body>
+    <button type="button" id="boton1">Pulsame 1</button>
+    Resultado: <input type="text" id="caja1">
+</body>
+</html>

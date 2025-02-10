@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="datos.js"></script>
+    <script>
+        onload = () => {
+            cargarSelect();
+            cargarBoton();
+            pintarNotas();
+            let botones = [...document.getElementsByTagName('button')];
+            botones.filter(boton => boton.textContent == 'Guardar')[0].addEventListener('click', guardarNota);
+        }
+        function cargarBoton() {
+            let boton = document.createElement('button');
+            document.body.appendChild(boton);
+            boton.textContent = 'Ver suspensos';
+            boton.addEventListener('click', verSuspensos);
+        }
+        function verSuspensos() {
+            notas.filter(nota => nota.nota < 5).forEach(nota => {
+                if (nota.nota < 5) {
+                    alert(`${nota.nombre},${nota.nota}`)
+                }
+            })
+        }
+        function guardarNota() {
+            let listaInputs = [...document.getElementsByTagName('input')];
+            let nombreTxt = listaInputs[0].value.trim();
+            let curso_codigoTxt = listaInputs[1].value.trim();
+            let curso_descripcionTxt = listaInputs[2].value.trim();
+            let notaTxt = parseInt(listaInputs[3].value.trim());
+            let nuevaNota = {
+                nombre: nombreTxt,
+                curso_codigo: curso_codigoTxt,
+                curso_descripcion: curso_descripcionTxt,
+                nota: notaTxt
+            }
+            let posicion = notas.findIndex(nota => nota.curso_codigo == curso_codigoTxt);
+            if (posicion == -1) {
+                notas.push(nuevaNota)
+                alert('nota guardada');
+                pintarNotas();
+            } else {
+                alert('El codigo ya lo tiene un alumno');
+            }
+        }
+        function pintarNotas(){
+            let contenedor=document.getElementsByTagName('tbody')[0];
+            contenedor.innerHTML='';
+            notas.forEach(nota=>{
+                let texto=`<tr><td>${nota.nombre}</td><td>${nota.nota}</td></tr>`;
+                contenedor.insertAdjacentHTML("beforeend",texto)
+            })
+        }
+        function cargarSelect(){
+            let select=document.getElementsByTagName('select')[0];
+            let codigoActual='';
+            select.innerHTML='<option value="-1">...</option>';
+            notas.sort((a,b)=>{
+                if(a.curso_codigo>b.curso_codigo) return 1;
+                else return -1;
+            })
+            .forEach(nota=>{
+                if(nota.curso_codigo!=codigoActual){
+                    select.insertAdjacentHTML("beforeend",`<option value="${nota.curso_codigo}">${nota.curso_descripcion}</option>`);
+                    codigoActual=nota.curso_codigo;
+                }
+            })
+        }
+    </script>
+</head>
+
+<body>
+    <div>
+        <form action="">
+            <p>Nombre: <input type="text"></p>
+            <p>Curso codigo: <select>
+            </select></p>
+            <p>Nota: <input type="text"></p>
+            <p><button type="button">Guardar</button></p>
+        </form>
+    </div>
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>nota</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

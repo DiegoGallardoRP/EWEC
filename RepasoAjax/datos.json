@@ -1,0 +1,14 @@
+[
+    {
+        "codigo": 1,
+        "nombre": "Juan"
+    },
+    {
+        "codigo": 2,
+        "nombre": "Nico"
+    },
+    {
+        "codigo": 3,
+        "nombre": "Lucas"
+    }
+]

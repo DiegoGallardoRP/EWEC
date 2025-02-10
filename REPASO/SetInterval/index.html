@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        var intervalo;//Variable
+        onload=()=>{
+            document.getElementById('lanzarTimeOut').addEventListener('click',lanzarTimeOut);
+            document.getElementById('lanzarInterval').addEventListener('click',lanzarInterval);
+        }
+        function lanzarTimeOut(evento){
+            intervalo=setTimeout(()=>{
+                document.getElementsByTagName('div')[0].style.backgroundColor='red';
+            },5000)
+        }
+        function lanzarInterval(evento){
+            let contador=1;
+            intervalo=setInterval(()=>{
+                let contenedor=document.getElementsByTagName('div')[0];
+                contenedor.innerText=contador;
+                contador++;
+                if(contador>10){
+                    clearInterval(intervalo);
+                }
+            },1000)
+        }
+    </script>
+</head>
+<body>
+    <div style="width:200px;height:200px">HOLA</div>
+    <button type="button" id="lanzarTimeOut">lanzarTimeOut</button>
+    <button type="button" id="lanzarInterval">lanzarInterval</button>
+</body>
+</html>

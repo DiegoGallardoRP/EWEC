@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .h{
+            background-color: yellow;
+        }
+    </style>
+    <script src="jquery.min.js"></script>
+    <script>
+        $(function(){
+            let miDiv=$('<div></div>').appendTo('body').css({'background-color':'yellow',width:'100px',height:'100px'}).on('click',function(){
+                $(this).animate({
+                    width:'+=100px',
+                    height:'+=100px'
+                },5000)
+            })
+            $('<button type="button">DELANTE</button>').insertBefore(miDiv).on('click',function(){
+                $(miDiv).hide(3000);
+            });
+            $('<button type="button">DETRAS</button>').insertAfter(miDiv).on('click',function(){
+                $(miDiv).show(3000);
+            })
+        });
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
