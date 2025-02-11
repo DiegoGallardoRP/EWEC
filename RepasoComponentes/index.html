@@ -4,8 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="jquery.min.js"></script>
+    <script src="main.js" type="module"></script>
+    <script>
+        onload=()=>{
+            $('button#boton2').click({},()=>{
+                $('app-resultado:eq(0)').attr('texto','OTRA COSA');
+                document.getElementsByTagName('app-resultado')[1].setAttribute('texto','OTRA COSA 2');
+            })
+        }
+    </script>
 </head>
 <body>
-    
+    <app-resultado texto="HOLA" estado="0"></app-resultado>
+    <app-resultado texto="ADIOS" estado="1"></app-resultado>
+    <button type="button" id="boton2">PULSAME 2</button>
 </body>
 </html>

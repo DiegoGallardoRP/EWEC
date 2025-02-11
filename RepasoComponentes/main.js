@@ -1,0 +1,1 @@
+import { etiquetaResultado } from "./componenteResultado.js";
