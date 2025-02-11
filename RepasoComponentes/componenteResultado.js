@@ -15,7 +15,8 @@ class Resultado extends HTMLElement{
                 color:red;
             }
         </style>
-        <p>${this.texto}</p>`;
+        <p>${this.texto}</p>
+        <h1><slot name="clase"></slot></h1>`;
         if(this.estado=='0'){
             contenido+=`<p>OK</p>`;
         }else{
